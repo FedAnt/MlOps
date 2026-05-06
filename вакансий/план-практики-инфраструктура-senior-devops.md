@@ -28,10 +28,14 @@
 - GitLab Runner поднят и привязан к GitLab на `192.168.1.102`.
 - `vm-k8s` доступен по `192.168.1.112`.
 - Kubernetes поднят на `vm-k8s` (выбран вариант `k3s`).
+- В `platform-infra` создан Python data-service (CSV/API -> Parquet/JSON, `/health`) и Dockerfile.
+- Образ собирается в GitLab CI и публикуется в GitLab Container Registry проекта.
+- Сервис задеплоен в k3s через Helm (`deploy_helm_k3s`), `/health` отвечает.
+- Ingress для `data-service` развернут, сервис доступен по `data-service.lab.local` (рабочий endpoint: `/health`).
 
 **В работе (ближайший шаг)**
 
-- Старт Фазы 1: контейнеризация первого data-сервиса, публикация образа в GitLab Container Registry, первый деплой в k3s.
+- Добавить post-deploy smoke-check в GitLab CI (`/health`, базовый ingest), чтобы деплой автоматически валидировался после Helm upgrade.
 
 **Предстоит**
 
@@ -140,9 +144,9 @@
 
 **Практика**
 
-- Dockerfile для data-сервиса (например, Python: читает CSV/API, пишет Parquet/JSON в локальный MinIO или каталог, экспонирует `/health`).
-- Образ в **GitLab Container Registry** проекта.
-- Deployment в Kubernetes: `Deployment`, `Service`, `ConfigMap`/`Secret`, `resources`, `liveness/readiness`.
+- [x] Dockerfile для data-сервиса (Python: читает CSV/API, пишет Parquet/JSON, экспонирует `/health`).
+- [x] Образ в **GitLab Container Registry** проекта.
+- [x] Deployment в Kubernetes через Helm: `Deployment`, `Service`, `resources`, `liveness/readiness`, `imagePullSecrets` для приватного registry.
 
 **Темы Senior**
 
@@ -326,7 +330,7 @@
 | Фаза | Статус | Срок (план) | Сделано (дата) | Ссылка на PR/коммит | Кейс для интервью |
 |------|--------|-------------|----------------|---------------------|-------------------|
 | 0 | Завершено | неделя 1 | 2026-05-01 | добавить | GitLab+Runner+k3s на VirtualBox |
-| 1 | Не начато | недели 2-3 |  |  |  |
+| 1 | Завершено | недели 2-3 | 2026-05-06 | добавить | Data-service: Docker -> Registry -> Helm deploy в k3s |
 | 2 | Не начато | недели 4-5 |  |  |  |
 | 3 | Не начато | недели 6-7 |  |  |  |
 | 4 | Не начато | недели 8-10 |  |  |  |
