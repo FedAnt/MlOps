@@ -34,10 +34,12 @@
 - Сервис задеплоен в k3s через Helm (`deploy_helm_k3s`), `/health` отвечает.
 - Ingress для `data-service` развернут, сервис доступен по `data-service.lab.local` (рабочий endpoint: `/health`).
 - В GitLab CI добавлен post-deploy smoke-check (`smoke_check_k3s`) после Helm деплоя; сборка/деплой проходят.
+- В `platform-infra` реализовано разделение окружений `dev/staging` (отдельные Helm values и deploy job в CI).
+- Для ingress-имен `data-service-dev.lab.local` и `data-service-staging.lab.local` добавлены alias в `etc_hosts_aliases` через Ansible inventory.
 
 ### В работе (ближайший шаг)
 
-- Начать Фазу 2: IaC и разделение окружений `dev/staging` для сервиса и деплоя.
+- Продолжить Фазу 2: закрепить IaC-подход и политику продвижения `dev -> staging` (manual gate, runbook отката).
 
 ### Предстоит
 
