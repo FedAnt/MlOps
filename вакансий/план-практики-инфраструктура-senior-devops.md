@@ -41,10 +41,13 @@
 - В `platform-infra/docs` оформлены документы Фазы 2: `iac-env-conventions.md`, `secrets-policy.md`, `ci-variable-template.md`.
 - OpenTofu skeleton подготовлен, но практический запуск **отложен** (закрыт доступ к registry провайдеров в текущем контуре).
 - В MR-шаблон `platform-infra` добавлен обязательный gate-чеклист `dev -> staging` и ссылки на стандарты эксплуатации/секретов/IaC.
+- Конвенции Фазы 2 применены к новому сервису `data-profile-service` в отдельном репозитории `platform-service` (отдельный chart, `dev/staging`, smoke-check через Ingress host-based).
+- Оба сервиса (`data-service` и `data-profile-service`) успешно задеплоены через GitLab CI в k3s по единому процессу `build -> deploy_dev -> smoke -> deploy_staging`.
+- В `platform-service` добавлен обязательный CI gate `validate` (Python compile + `helm lint`) перед сборкой и деплоем.
 
 ### В работе (ближайший шаг)
 
-- Продолжить Фазу 2 без OpenTofu: применить зафиксированные конвенции к следующему сервису/чарту.
+- Продолжить Фазу 3: добавить API/контрактные тесты в CI и расширить quality gates до проверок данных (до `build` и `deploy`).
 
 ### Предстоит
 
@@ -340,8 +343,8 @@
 | --- | --- | --- | --- | --- | --- |
 | 0 | Завершено | неделя 1 | 2026-05-01 | добавить | GitLab+Runner+k3s на VirtualBox |
 | 1 | Завершено | недели 2-3 | 2026-05-06 | platform-infra (main) | Data-service: Docker -> Registry -> Helm deploy + Ingress + smoke-check |
-| 2 | Не начато | недели 4-5 |  |  |  |
-| 3 | Не начато | недели 6-7 |  |  |  |
+| 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
+| 3 | В работе | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality gates) | Введены quality gates и управляемое продвижение между средами |
 | 4 | Не начато | недели 8-10 |  |  |  |
 | 5 | Не начато | недели 10-12 |  |  |  |
 | 6 | Не начато | недели 12-14 |  |  |  |
