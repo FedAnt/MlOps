@@ -39,10 +39,11 @@
 - Пайплайн `dev -> staging` отработал успешно: `deploy_helm_dev`/`smoke_check_dev` и ручной `deploy_helm_staging`, сервисы в кластере обновлены.
 - Добавлен runbook `dev -> staging` с шагами проверки и rollback (`docs/runbook-dev-staging.md` в `platform-infra`).
 - В `platform-infra/docs` оформлены документы Фазы 2: `iac-env-conventions.md`, `secrets-policy.md`, `ci-variable-template.md`.
+- OpenTofu skeleton подготовлен, но практический запуск **отложен** (закрыт доступ к registry провайдеров в текущем контуре).
 
 ### В работе (ближайший шаг)
 
-- Продолжить Фазу 2: применить конвенции к следующему сервису/чарту и оформить PR-шаблон проверки `dev -> staging`.
+- Продолжить Фазу 2 без OpenTofu: применить конвенции к следующему сервису/чарту и оформить PR-шаблон проверки `dev -> staging`.
 
 ### Предстоит
 
