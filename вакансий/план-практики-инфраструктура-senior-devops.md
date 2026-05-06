@@ -40,10 +40,11 @@
 - Добавлен runbook `dev -> staging` с шагами проверки и rollback (`docs/runbook-dev-staging.md` в `platform-infra`).
 - В `platform-infra/docs` оформлены документы Фазы 2: `iac-env-conventions.md`, `secrets-policy.md`, `ci-variable-template.md`.
 - OpenTofu skeleton подготовлен, но практический запуск **отложен** (закрыт доступ к registry провайдеров в текущем контуре).
+- В MR-шаблон `platform-infra` добавлен обязательный gate-чеклист `dev -> staging` и ссылки на стандарты эксплуатации/секретов/IaC.
 
 ### В работе (ближайший шаг)
 
-- Продолжить Фазу 2 без OpenTofu: применить конвенции к следующему сервису/чарту и оформить PR-шаблон проверки `dev -> staging`.
+- Продолжить Фазу 2 без OpenTofu: применить зафиксированные конвенции к следующему сервису/чарту.
 
 ### Предстоит
 
