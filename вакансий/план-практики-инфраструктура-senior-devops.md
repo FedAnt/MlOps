@@ -36,10 +36,13 @@
 - В GitLab CI добавлен post-deploy smoke-check (`smoke_check_k3s`) после Helm деплоя; сборка/деплой проходят.
 - В `platform-infra` реализовано разделение окружений `dev/staging` (отдельные Helm values и deploy job в CI).
 - Для ingress-имен `data-service-dev.lab.local` и `data-service-staging.lab.local` добавлены alias в `etc_hosts_aliases` через Ansible inventory.
+- Пайплайн `dev -> staging` отработал успешно: `deploy_helm_dev`/`smoke_check_dev` и ручной `deploy_helm_staging`, сервисы в кластере обновлены.
+- Добавлен runbook `dev -> staging` с шагами проверки и rollback (`docs/runbook-dev-staging.md` в `platform-infra`).
+- В `platform-infra/docs` оформлены документы Фазы 2: `iac-env-conventions.md`, `secrets-policy.md`, `ci-variable-template.md`.
 
 ### В работе (ближайший шаг)
 
-- Продолжить Фазу 2: закрепить IaC-подход и политику продвижения `dev -> staging` (manual gate, runbook отката).
+- Продолжить Фазу 2: применить конвенции к следующему сервису/чарту и оформить PR-шаблон проверки `dev -> staging`.
 
 ### Предстоит
 
