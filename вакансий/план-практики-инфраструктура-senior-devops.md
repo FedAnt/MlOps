@@ -44,10 +44,21 @@
 - Конвенции Фазы 2 применены к новому сервису `data-profile-service` в отдельном репозитории `platform-service` (отдельный chart, `dev/staging`, smoke-check через Ingress host-based).
 - Оба сервиса (`data-service` и `data-profile-service`) успешно задеплоены через GitLab CI в k3s по единому процессу `build -> deploy_dev -> smoke -> deploy_staging`.
 - В `platform-service` добавлен обязательный CI gate `validate` (Python compile + `helm lint`) перед сборкой и деплоем.
+- Для `platform-service` внедрены API/контрактные тесты FastAPI в CI (`validate_api_contract`) до `build`, полный pipeline проходит успешно.
+- Для `platform-service` внедрён отдельный `data_quality_gate_dev` (schema/null/range checks) перед `deploy_helm_staging`; полный pipeline успешно отрабатывает с новым quality gate.
+- В `platform-service` выполнен рефактор CI deploy-слоя: логика из `ci/includes/deploy.yml` вынесена в `ci/scripts/*.sh` (без изменения поведения pipeline).
+- В `platform-service` добавлен документ-стандарт `docs/ci-architecture.md` (структура `ci/includes + ci/scripts`, onboarding нового сервиса и добавление новых gates).
+- Для `platform-service` введён централизованный policy-файл `data-profile-service/quality-policy.json`; data-quality gate читает пороги (required columns, null-rate, numeric ranges) из конфигурации.
+- В `platform-service` добавлен `docs/staging-quality-checklist.md`: ручной go/no-go чеклист перед `deploy_helm_staging` и шаги rollback.
+- Для `platform-service` зафиксированы лабораторные SLA/SLO и error budget в `docs/slo-sla.md` с привязкой к CI quality gates.
+- Для Фазы 4 добавлен архитектурный baseline `platform-service/docs/data-path-minimum.md` (MinIO в k3s, Airflow/dbt контур, MVP-критерии).
+- В `platform-service` подготовлен bootstrap MinIO: manual CI jobs `deploy_minio_dev`/`init_minio_buckets_dev`, values-файлы `helm/minio/*` и runbook `docs/minio-bootstrap.md`.
+- В `platform-service` успешно выполнен практический deploy MinIO в `data-platform-storage` и инициализированы buckets `raw/staging/marts`.
+- В `platform-service` подготовлен Airflow baseline: DAG-каркас `airflow/dags/raw_to_staging.py`, `helm/airflow/values-dev.yaml`, job `validate_airflow_dags`, manual `deploy_airflow_dev`, документ `docs/airflow-baseline.md`.
 
 ### В работе (ближайший шаг)
 
-- Продолжить Фазу 3: добавить API/контрактные тесты в CI и расширить quality gates до проверок данных (до `build` и `deploy`).
+- Продолжить Фазу 4: выполнить практический деплой Airflow (`deploy_airflow_dev`), загрузить DAG в кластер и подтвердить появление `raw_to_staging_minimal` в UI.
 
 ### Предстоит
 
@@ -344,8 +355,8 @@
 | 0 | Завершено | неделя 1 | 2026-05-01 | добавить | GitLab+Runner+k3s на VirtualBox |
 | 1 | Завершено | недели 2-3 | 2026-05-06 | platform-infra (main) | Data-service: Docker -> Registry -> Helm deploy + Ingress + smoke-check |
 | 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
-| 3 | В работе | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality gates) | Введены quality gates и управляемое продвижение между средами |
-| 4 | Не начато | недели 8-10 |  |  |  |
+| 3 | Завершено | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality + docs + SLA/SLO) | Введены quality gates, policy-driven проверки, CI-стандарты, staging checklist и эксплуатационные SLO |
+| 4 | В работе | недели 8-10 | 2026-05-06 | platform-service (data-path + minio + airflow baseline) | MinIO в k3s + buckets; Airflow baseline: DAG, Helm values, CI validate, manual deploy |
 | 5 | Не начато | недели 10-12 |  |  |  |
 | 6 | Не начато | недели 12-14 |  |  |  |
 | 7 | Не начато | недели 14-15 |  |  |  |
