@@ -16,24 +16,31 @@
 
 `logical_date` / `catchup` / `@daily`; в DAG — `doc_md`, `echo_lab_marker`, доставка в кластер. Чеклист раздела 3 (базовые пункты) — выполнен.
 
-### Урок 3 (текущий)
+### Урок 3 (закрыт)
+
+`params`, Variable `lab_raw_prefix`, Connection **`minio_lab`**, trigger и лог **`show_run_context`**.
+
+### Урок 4 (закрыт)
+
+`validate_raw_zone` + **S3Hook** / **minio_lab**; run `manual__2026-05-15T12:47:39` — success, `keys_found=1`, объект `incoming/test.txt`.
+
+### Урок 5 (текущий) — администратор платформы
 
 **Теория (кратко):**
 
-- **`params`** у DAG — параметры run (имена bucket и т.п.); при ручном trigger в UI можно переопределить; в операторах подставляются как `{{ params.raw_bucket }}`.
-- **Variables** — глобальные настройки среды (префиксы, флаги), **не** пароли; в шаблонах: `{{ var.value.lab_raw_prefix }}`. Секреты — только **Connections**.
-- **Jinja в операторах:** поля вроде `bash_command` шаблонизируются; `{{ ds }}` — дата logical run.
-- **Ретраи:** `default_args` задают базу; у «внешней» задачи можно усилить `retries` / `retry_delay` точечно (как у `validate_raw_zone`).
+- **Helm release** — единая точка версий chart + values; `helm upgrade --wait` ждёт Ready подов.
+- **Диагностика UI «no available server»** — Traefik без backend: webserver не Ready / OOM / рестарт (см. `kubectl describe pod`, Events, `lastState.terminated.reason`).
+- **Ресурсы:** webserver Airflow тяжёлый; лимит памяти в `helm/airflow/values-dev.yaml` (в лаборатории **1536Mi** после OOM).
+- **Секреты:** `FERNET_KEY`, `WEBSERVER_SECRET_KEY` — стабильность connections и сессий UI (GitLab CI variables).
 
 **Практика:**
 
-1. Задеплойте обновлённый `raw_to_staging.py` (узел **`show_run_context`** в Graph).
-2. Создайте Variable **`lab_raw_prefix`** = `incoming/` (UI или CLI — `docs/airflow-baseline.md`, раздел «Variables и Connection»).
-3. Создайте Connection **`minio_lab`** к MinIO (таблица полей в том же разделе baseline).
-4. **Trigger DAG** → в логе **`show_run_context`** на scheduler должна быть строка с `raw_bucket`, `staging_bucket`, `prefix`.
-5. (Опционально) Trigger с config: `{"raw_bucket": "raw-test"}` — убедитесь, что в логе подставился новый bucket.
+1. Выполните «чеклист админа» (5 команд ниже) и сохраните вывод у себя в заметках.
+2. Откройте **`helm/airflow/values-dev.yaml`**: найдите `ingress.web`, `extraEnv` (**BASE_URL**), `webserver.resources`.
+3. (Рекомендуется) задайте в GitLab **`AIRFLOW_FERNET_KEY`** и **`AIRFLOW_WEBSERVER_SECRET_KEY`**, перезапустите deploy — или осознанно оставьте автогенерацию с риском сброса сессий.
+4. Симуляция инцидента: `kubectl -n data-platform-orchestration get events --field-selector involvedObject.name=airflow-webserver-...` после рестарта — что пишет kubelet?
 
-**Критерий конца урока 3:** объясняете разницу params / Variable / Connection; в кластере есть Variable и Connection; run с `show_run_context` успешен.
+**Критерий конца урока 5:** по симптому «UI недоступен» знаете цепочку: Ingress → Service → Pod → logs/describe/OOM; умеете прочитать `helm status airflow -n data-platform-orchestration`.
 
 ---
 
@@ -151,8 +158,8 @@
 
 ### Раздел 5. Данные / MinIO
 
-- [ ] В Airflow создана Connection к MinIO (или запланирована и задокументирована заглушка с понятным следующим шагом).
-- [ ] Одна задача DAG обращается к object storage (list head object / проверка префикса) без дублирования секретов в Git.
+- [x] В Airflow создана Connection к MinIO (или запланирована и задокументирована заглушка с понятным следующим шагом).
+- [x] Одна задача DAG обращается к object storage (list head object / проверка префикса) без дублирования секретов в Git.
 
 ### Раздел 6. Сквозной мини-проект (**возврат после dbt / ClickHouse / Trino**)
 
