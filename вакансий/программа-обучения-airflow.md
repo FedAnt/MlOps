@@ -2,6 +2,8 @@
 
 Документ фиксирует **маршрут изучения** Airflow в связке с общим планом [`план-практики-инфраструктура-senior-devops.md`](./план-практики-инфраструктура-senior-devops.md) (**Фаза 4**: MinIO, Airflow, dbt, ClickHouse, Trino).
 
+**Следующий курс после базового трека (уроки 1–5):** [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) — затем возврат к **разделу 6** ниже.
+
 **Артефакты в репозитории:** `platform-service/docs/airflow-baseline.md`, DAG `airflow/dags/`, Helm `helm/airflow/values-dev.yaml`, CI job `deploy_airflow_dev`.
 
 ---
@@ -24,23 +26,15 @@
 
 `validate_raw_zone` + **S3Hook** / **minio_lab**; run `manual__2026-05-15T12:47:39` — success, `keys_found=1`, объект `incoming/test.txt`.
 
-### Урок 5 (текущий) — администратор платформы
+### Урок 5 (закрыт)
 
-**Теория (кратко):**
+`deploy_airflow_dev` с **`AIRFLOW_FERNET_KEY`** / **`AIRFLOW_WEBSERVER_SECRET_KEY`**; Helm revision **13**, поды Running; диагностика OOM / «no available server».
 
-- **Helm release** — единая точка версий chart + values; `helm upgrade --wait` ждёт Ready подов.
-- **Диагностика UI «no available server»** — Traefik без backend: webserver не Ready / OOM / рестарт (см. `kubectl describe pod`, Events, `lastState.terminated.reason`).
-- **Ресурсы:** webserver Airflow тяжёлый; лимит памяти в `helm/airflow/values-dev.yaml` (в лаборатории **1536Mi** после OOM).
-- **Секреты:** `FERNET_KEY`, `WEBSERVER_SECRET_KEY` — стабильность connections и сессий UI (GitLab CI variables).
+### Базовый трек Airflow (уроки 1–5) — завершён
 
-**Практика:**
+Дальше — [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) (треки dbt → Trino → ClickHouse). **Возврат к Airflow** — **раздел 6** и чеклист **6.1–6.5** (сквозной DAG с оркестрацией уже развёрнутых инструментов).
 
-1. Выполните «чеклист админа» (5 команд ниже) и сохраните вывод у себя в заметках.
-2. Откройте **`helm/airflow/values-dev.yaml`**: найдите `ingress.web`, `extraEnv` (**BASE_URL**), `webserver.resources`.
-3. (Рекомендуется) задайте в GitLab **`AIRFLOW_FERNET_KEY`** и **`AIRFLOW_WEBSERVER_SECRET_KEY`**, перезапустите deploy — или осознанно оставьте автогенерацию с риском сброса сессий.
-4. Симуляция инцидента: `kubectl -n data-platform-orchestration get events --field-selector involvedObject.name=airflow-webserver-...` после рестарта — что пишет kubelet?
-
-**Критерий конца урока 5:** по симптому «UI недоступен» знаете цепочку: Ingress → Service → Pod → logs/describe/OOM; умеете прочитать `helm status airflow -n data-platform-orchestration`.
+**Перед паузой (5 мин):** после смены Fernet проверьте Connection **`minio_lab`** (при ошибке в `validate_raw_zone` — пересоздайте connection в UI) и один **Trigger** DAG.
 
 ---
 
@@ -151,10 +145,10 @@
 
 ### Раздел 4. Администратор
 
-- [ ] Известны команды: `kubectl get pods`, `get ingress`, `get events`, логи `deploy/airflow-webserver`.
-- [ ] Выполнен или осознан `helm upgrade` с `values-dev.yaml`; понятен смысл `--wait` и таймаута.
-- [ ] Зафиксировано для себя: где задаётся `BASE_URL`, почему без trailing slash.
-- [ ] (Рекомендуется) заданы стабильные `AIRFLOW_FERNET_KEY` и `AIRFLOW_WEBSERVER_SECRET_KEY` в CI/CD variables по baseline.
+- [x] Известны команды: `kubectl get pods`, `get ingress`, `get events`, логи `deploy/airflow-webserver`.
+- [x] Выполнен или осознан `helm upgrade` с `values-dev.yaml`; понятен смысл `--wait` и таймаута.
+- [x] Зафиксировано для себя: где задаётся `BASE_URL`, почему без trailing slash.
+- [x] (Рекомендуется) заданы стабильные `AIRFLOW_FERNET_KEY` и `AIRFLOW_WEBSERVER_SECRET_KEY` в CI/CD variables по baseline.
 
 ### Раздел 5. Данные / MinIO
 
@@ -163,9 +157,9 @@
 
 ### Раздел 6. Сквозной мини-проект (**возврат после dbt / ClickHouse / Trino**)
 
-- [ ] **6.1** — DAG с расписанием и `doc_md`.
-- [ ] **6.2** — цепочка из ≥3 задач с явными зависимостями.
-- [ ] **6.3** — параметры через `params` или Variables для префиксов/имён bucket.
+- [x] **6.1** — DAG с расписанием и `doc_md` (базовый трек; уточнить при возврате после dbt/CH/Trino).
+- [x] **6.2** — цепочка из ≥3 задач с явными зависимостями.
+- [x] **6.3** — параметры через `params` или Variables для префиксов/имён bucket.
 - [ ] **6.4** — осмысленные ретраи на шаге, зависящем от внешней системы.
 - [ ] **6.5** — короткий runbook (1 страница) в `docs/` репозитория или в этом файле в конце как приложение.
 
@@ -173,7 +167,7 @@
 
 ## Возврат после изучения других продуктов из списка Фазы 4
 
-**Список продуктов Фазы 4** (помимо уже поднятого MinIO и Airflow): **dbt**, **ClickHouse**, **Trino** — см. практику в [`план-практики-инфраструктура-senior-devops.md`](./план-практики-инфраструктура-senior-devops.md), раздел «Фаза 4».
+**Список продуктов Фазы 4** (помимо уже поднятого MinIO и Airflow): **dbt**, **ClickHouse**, **Trino** — маршрут обучения: [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md); практика в [`план-практики-инфраструктура-senior-devops.md`](./план-практики-инфраструктура-senior-devops.md), раздел «Фаза 4».
 
 **На какой шаг вернуться:** к **разделу 6** этой программы и чеклисту — с пункта **6.1** («Сквозной мини-проект»). Имеется в виду: не перечитывать с нуля разделы 1–5, а **добавить в DAG оркестрацию уже освоенных инструментов** (вызов dbt, шаг с Trino, публикация в ClickHouse и т.д.) и довести **6.1–6.5** до выполнения.
 
