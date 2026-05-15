@@ -12,35 +12,28 @@
 
 Смысл Airflow, обход UI (Graph/Grid, trigger), схема «DAG → scheduler → БД → UI», домашнее задание. В репозитории добавлены **`doc_md`** у DAG и задач — в UI откройте DAG → **Details** / документация.
 
-### Урок 2 (текущий)
+### Урок 2 (закрыт)
+
+`logical_date` / `catchup` / `@daily`; в DAG — `doc_md`, `echo_lab_marker`, доставка в кластер. Чеклист раздела 3 (базовые пункты) — выполнен.
+
+### Урок 3 (текущий)
 
 **Теория (кратко):**
 
-- Scheduler создаёт **DAG Run** на границе **data interval**; у каждого run есть **`logical_date`** (раньше «execution date») — это «метка» интервала данных, а не обязательно момент старта часов.
-- **`catchup=False`** — не создавать прошлые run за всё время с `start_date` до «сегодня»; для лаборатории это норма.
-- **`schedule_interval="@daily"`** — суточный тик; смена расписания влияет на **следующие** run, не переписывает историю.
+- **`params`** у DAG — параметры run (имена bucket и т.п.); при ручном trigger в UI можно переопределить; в операторах подставляются как `{{ params.raw_bucket }}`.
+- **Variables** — глобальные настройки среды (префиксы, флаги), **не** пароли; в шаблонах: `{{ var.value.lab_raw_prefix }}`. Секреты — только **Connections**.
+- **Jinja в операторах:** поля вроде `bash_command` шаблонизируются; `{{ ds }}` — дата logical run.
+- **Ретраи:** `default_args` задают базу; у «внешней» задачи можно усилить `retries` / `retry_delay` точечно (как у `validate_raw_zone`).
 
 **Практика:**
 
-1. Задеплойте обновлённый `raw_to_staging.py` в кластер (команды в `docs/airflow-baseline.md`, раздел про загрузку DAG через `exec` + `cat`).
-2. В UI откройте **DAG → Details / Documentation** — должен отображаться новый **`doc_md`** (таблица `task_id` ↔ смысл).
-3. На вкладке **Code** (если включена) или в репозитории сопоставьте `task_id` с узлами Graph.
-4. В репозитории уже добавлена **`BashOperator`** `echo_lab_marker` — задеплойте DAG, сделайте trigger и найдите в логе на scheduler строку `lesson-2 marker` (команды в `docs/airflow-baseline.md`, раздел «Логи задачи в UI пустые»).
+1. Задеплойте обновлённый `raw_to_staging.py` (узел **`show_run_context`** в Graph).
+2. Создайте Variable **`lab_raw_prefix`** = `incoming/` (UI или CLI — `docs/airflow-baseline.md`, раздел «Variables и Connection»).
+3. Создайте Connection **`minio_lab`** к MinIO (таблица полей в том же разделе baseline).
+4. **Trigger DAG** → в логе **`show_run_context`** на scheduler должна быть строка с `raw_bucket`, `staging_bucket`, `prefix`.
+5. (Опционально) Trigger с config: `{"raw_bucket": "raw-test"}` — убедитесь, что в логе подставился новый bucket.
 
-**Критерий конца урока 2:** можете объяснить, зачем нужен `logical_date`, и в кластере после доставки файла в UI виден обновлённый граф (узел **`echo_lab_marker`**) + в файле лога на scheduler есть строка **`lesson-2 marker`**.
-
-Чеклист: закройте пункт «минимальная правка + доставка» в разделе 3 после шагов 1–4.
-
-### Пауза (зафиксировано)
-
-**Прервались до следующего дня.** При возобновлении открывайте этот файл с места **«Урок 2»** (доделать практику/чеклист, если не успели), затем переходите к **следующему разделу**.
-
-**Следующий раздел — Урок 3 (запланировано):**
-
-- Параметры DAG: **`params`**, шаблоны в полях операторов (основы Jinja в контексте Airflow).
-- **Variables** в UI / CLI: префиксы bucket, окружение; без секретов в коде.
-- **Ретраи** на шагах с внешними системами (`retries`, `retry_delay`, когда не завышать).
-- Задел под **Connection к MinIO** (тип `aws`/`amazon`, `endpoint_url` на сервис в кластере) — согласовано с разделом **5** этой программы и `docs/airflow-baseline.md`.
+**Критерий конца урока 3:** объясняете разницу params / Variable / Connection; в кластере есть Variable и Connection; run с `show_run_context` успешен.
 
 ---
 
