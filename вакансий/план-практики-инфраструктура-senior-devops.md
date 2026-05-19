@@ -55,10 +55,11 @@
 - В `platform-service` подготовлен bootstrap MinIO: manual CI jobs `deploy_minio_dev`/`init_minio_buckets_dev`, values-файлы `helm/minio/*` и runbook `docs/minio-bootstrap.md`.
 - В `platform-service` успешно выполнен практический deploy MinIO в `data-platform-storage` и инициализированы buckets `raw/staging/marts`.
 - В `platform-service` подготовлен Airflow baseline: DAG-каркас `airflow/dags/raw_to_staging.py`, `helm/airflow/values-dev.yaml`, job `validate_airflow_dags`, manual `deploy_airflow_dev`, документ `docs/airflow-baseline.md`.
+- Пройден базовый трек Airflow (уроки 1–5, [`программа-обучения-airflow.md`](./программа-обучения-airflow.md)): деплой в k3s (Helm revision 13), Ingress `airflow-dev.lab.local`, DAG `raw_to_staging_minimal` (params, Variables, Connection `minio_lab`, S3Hook → MinIO), стабильные `AIRFLOW_FERNET_KEY` / `AIRFLOW_WEBSERVER_SECRET_KEY` в GitLab CI; run с `validate_raw_zone` success (`keys_found=1`).
 
 ### В работе (ближайший шаг)
 
-- Продолжить Фазу 4 по маршруту обучения [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) (треки dbt → Trino → ClickHouse), затем возврат к сквозному DAG в [`программа-обучения-airflow.md`](./программа-обучения-airflow.md) (раздел 6).
+- **Трек A (dbt):** [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) — уроки A.1–A.5 (проект `dbt/`, `dbt run`/`test`, CI gate).
 
 ### Предстоит
 
@@ -258,9 +259,13 @@
 
 ### Фаза 5. Observability и SLO (недели 10–12)
 
+**Маршрут обучения:** [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md) (треки StatsD → Prometheus → Sentry → сквозной observability).
+
 ### Практика
 
 - Prometheus + Grafana (или managed аналог, если в облаке): метрики приложения и инфраструктуры.
+- **StatsD:** отправка метрик из приложений, мост через statsd_exporter в Prometheus.
+- **Sentry:** отлов исключений и контекст ошибок в data-сервисах (DSN в CI Variables).
 - Структурированные логи (минимум JSON в stdout + сбор через стек лаборатории).
 - **Data-SLI:** метрика «возраст последней успешной записи» / latency пайплайна / счётчик ошибок задачи — и дашборд + алерт.
 
@@ -358,7 +363,7 @@
 | 1 | Завершено | недели 2-3 | 2026-05-06 | platform-infra (main) | Data-service: Docker -> Registry -> Helm deploy + Ingress + smoke-check |
 | 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
 | 3 | Завершено | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality + docs + SLA/SLO) | Введены quality gates, policy-driven проверки, CI-стандарты, staging checklist и эксплуатационные SLO |
-| 4 | В работе | недели 8-10 | 2026-05-06 | platform-service (data-path + minio + airflow baseline) | MinIO в k3s + buckets; Airflow baseline: DAG, Helm values, CI validate, manual deploy |
+| 4 | В работе | недели 8-10 | 2026-05-15 | platform-service (MinIO + Airflow уроки 1–5) | MinIO deploy + buckets; Airflow: Helm/Ingress, DAG+MinIO S3Hook, CI deploy, программа 1–5 закрыта; далее dbt → Trino → CH |
 | 5 | Не начато | недели 10-12 |  |  |  |
 | 6 | Не начато | недели 12-14 |  |  |  |
 | 7 | Не начато | недели 14-15 |  |  |  |

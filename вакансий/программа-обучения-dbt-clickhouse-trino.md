@@ -26,7 +26,19 @@
 Критерий: …
 ```
 
-*(Записей пока нет — старт после закрытия базового трека Airflow.)*
+### Урок A.1 (текущий) — что такое dbt и зачем в data-path
+
+**Теория (кратко):** dbt — SQL-трансформации в Git: модели, `ref()`, тесты, `dbt docs`; Airflow запускает `dbt run`, не дублирует бизнес-SQL в DAG.
+
+**Практика:**
+
+1. Прочитать § **0** и **Трек A § A.1** ниже в этом файле.
+2. Устно (или в заметке): чем dbt отличается от «длинного SQL в BashOperator».
+3. Открыть [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md) — где в схеме место dbt между `staging` и `marts`.
+
+**Критерий:** одна фраза «зачем dbt при уже работающем Airflow + MinIO».
+
+*(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
 
 ---
 
@@ -334,6 +346,8 @@ flowchart LR
 3. Закройте **6.4** (ретраи на внешних шагах) и **6.5** (runbook в `platform-service/docs/` или приложение к программе Airflow).
 
 **Связь с общим планом:** завершение Фазы 4 по пунктам «dbt + ClickHouse + Trino в пайплайне» и интеграции с GitLab CI для артефактов моделей/DAG.
+
+**Следующий курс (Фаза 5):** [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md) — Prometheus, StatsD, Sentry.
 
 ---
 
