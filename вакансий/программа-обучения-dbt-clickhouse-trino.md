@@ -8,7 +8,7 @@
 
 **Связанные документы:** [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md), [`программа-обучения-airflow.md`](./программа-обучения-airflow.md) (раздел 6 — возврат после этого курса), [`правила-ведения-плана-и-резюме.md`](./правила-ведения-плана-и-резюме.md).
 
-**Целевые артефакты в репозитории:** `platform-service/dbt/` и job **`validate_dbt`** — добавлены; `helm/trino/`, `helm/clickhouse/`, runbook'и — дальше по трекам B/C.
+**Целевые артефакты в репозитории:** `platform-service/dbt/` + **`validate_dbt`** ✅; `helm/trino/` + `docs/trino-baseline.md` + CI `deploy_trino_dev` — добавлены; `helm/clickhouse/` — трек C.
 
 **Порядок треков:** A (dbt) → B (Trino) → C (ClickHouse) → D (сквозной сценарий) → возврат в Airflow (раздел 6).
 
@@ -44,11 +44,17 @@
 
 **Критерий:** трек A закрыт — staging-модель и тесты проходят в CI.
 
-### Урок B.1 (в работе)
+### Урок B.1 (закрыт, 2026-05-19)
 
-**Смысл:** Trino — federated SQL над lake (MinIO + catalog); ad-hoc и проверки слоёв `raw`/`staging`, витрины — ClickHouse (трек C).
+**Смысл:** Trino — federated SQL над каталогами; в лаборатории — проверки и ad-hoc над lake, витрины — ClickHouse.
 
-**Следующий артефакт:** `helm/trino/` в `platform-infra` или `platform-service`, namespace `data-platform-query`, runbook endpoint.
+**Формулировка:** «dbt трансформирует; Trino спрашивает SQL-ом; CH отдаёт витрины».
+
+### Урок B.4 (в работе)
+
+**Сделано в репозитории:** `helm/trino/values-dev.yaml`, `docs/trino-baseline.md`, `deploy_trino_dev`, `smoke_trino_dev`.
+
+**Критерий закрытия:** на кластере pod Running, `smoke_trino_dev` зелёный (`SHOW CATALOGS`, `SELECT` на `tpch`).
 
 *(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
 
@@ -312,8 +318,8 @@ flowchart LR
 
 ### Трек B — Trino
 
-- [ ] **B.1** — объяснено отличие Trino от ClickHouse в лаборатории.
-- [ ] **B.4** — Trino развёрнут в k3s (Helm / manual CI); поды Running.
+- [x] **B.1** — объяснено отличие Trino от ClickHouse в лаборатории.
+- [ ] **B.4** — Trino развёрнут в k3s (`deploy_trino_dev`); поды Running; smoke зелёный.
 - [ ] **B.2** — catalog на MinIO/lake описан в runbook или журнале.
 - [ ] **B.3** — выполнен `SHOW SCHEMAS` / `SELECT` по raw или staging.
 - [ ] **B.3** — для одного запроса просмотрен `EXPLAIN`.
@@ -340,8 +346,8 @@ flowchart LR
 
 ### MVP data-path (сверка с data-path-minimum)
 
-- [ ] MinIO: buckets `raw/staging/marts` (уже сделано на предыдущих шагах Фазы 4).
-- [ ] Airflow DAG по расписанию/вручную (базовый трек).
+- [x] MinIO: buckets `raw/staging/marts` (`data-platform-storage`, `docs/minio-bootstrap.md`).
+- [x] Airflow DAG по расписанию/вручную (`raw_to_staging_minimal`, базовый трек Airflow закрыт).
 - [x] Минимум 1 dbt-модель и 1 dbt-test (`stg_profiles`, CI `validate_dbt`).
 - [ ] Данные из `raw` в `staging` без ручных правок.
 - [ ] Runbook после сбоя DAG/dbt/job (можно объединить с Airflow 6.5).
