@@ -8,7 +8,7 @@
 
 **Связанные документы:** [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md), [`программа-обучения-airflow.md`](./программа-обучения-airflow.md) (раздел 6 — возврат после этого курса), [`правила-ведения-плана-и-резюме.md`](./правила-ведения-плана-и-резюме.md).
 
-**Целевые артефакты в репозитории** (по мере прохождения, без выдуманного «уже сделано»): `platform-service/dbt/`, `helm/trino/`, `helm/clickhouse/`, CI jobs `validate_dbt` / deploy, runbook'и в `platform-service/docs/`.
+**Целевые артефакты в репозитории:** `platform-service/dbt/` и job **`validate_dbt`** — добавлены; `helm/trino/`, `helm/clickhouse/`, runbook'и — дальше по трекам B/C.
 
 **Порядок треков:** A (dbt) → B (Trino) → C (ClickHouse) → D (сквозной сценарий) → возврат в Airflow (раздел 6).
 
@@ -28,17 +28,17 @@
 Критерий: …
 ```
 
-### Урок A.1 (текущий) — что такое dbt и зачем в data-path
+### Урок A.1 (закрыт, 2026-05-19)
 
-**Теория (кратко):** dbt — SQL-трансформации в Git: модели, `ref()`, тесты, `dbt docs`; Airflow запускает `dbt run`, не дублирует бизнес-SQL в DAG.
+**Смысл:** dbt держит SQL-трансформации, тесты и lineage в Git; Airflow только оркестрирует `dbt run`, не дублирует бизнес-SQL в DAG.
 
-**Практика:**
+**Формулировка для себя:** «MinIO и Airflow двигают данные по слоям; dbt описывает, *как* raw становится staging/marts, с проверками на MR».
 
-1. Прочитать § **0** и **Трек A § A.1** ниже в этом файле.
-2. Устно (или в заметке): чем dbt отличается от «длинного SQL в BashOperator».
-3. Открыть [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md) — где в схеме место dbt между `staging` и `marts`.
+**Артефакт:** [`platform-service/docs/dbt-baseline.md`](../../platform-service/docs/dbt-baseline.md), каталог `platform-service/dbt/`.
 
-**Критерий:** одна фраза «зачем dbt при уже работающем Airflow + MinIO».
+### Урок A.2–A.5 (в работе)
+
+Скелет проекта и CI `validate_dbt` в репозитории; закрыть чеклист A после зелёного pipeline и локального `dbt test`.
 
 *(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
 
@@ -283,19 +283,19 @@ flowchart LR
 
 ### Раздел 0. Роли в data-path
 
-- [ ] Прочитан раздел 0; можете нарисовать/проговорить путь `raw → staging → marts`.
-- [ ] Понятна граница Airflow / dbt / Trino / ClickHouse.
+- [x] Прочитан раздел 0; можете нарисовать/проговорить путь `raw → staging → marts`.
+- [x] Понятна граница Airflow / dbt / Trino / ClickHouse.
 
 ### Трек A — dbt
 
-- [ ] **A.1** — объяснена роль dbt vs SQL в DAG.
-- [ ] **A.2** — найдены `dbt_project.yml`, profile, каталог `models/`.
-- [ ] **A.3** — объявлен `source` на raw; есть staging-модель.
-- [ ] **A.3** — в `schema.yml` минимум один generic test (`not_null` или `unique`).
-- [ ] **A.4** — на MR настроен или запланирован gate `dbt compile` + `dbt test`.
-- [ ] **A.4** — credentials не лежат в Git (CI Variables / local profiles).
-- [ ] **A.5** — проект в `platform-service/dbt/` (или зафиксирован отдельный репозиторий в журнале).
-- [ ] **A.5** — локальный или CI прогон `dbt run` + `dbt test` успешен.
+- [x] **A.1** — объяснена роль dbt vs SQL в DAG.
+- [x] **A.2** — найдены `dbt_project.yml`, profile, каталог `models/`.
+- [x] **A.3** — объявлен `source` на raw; есть staging-модель.
+- [x] **A.3** — в `schema.yml` минимум один generic test (`not_null` или `unique`).
+- [x] **A.4** — на MR gate `validate_dbt` (`seed` + `run` + `test` + `compile`).
+- [x] **A.4** — credentials не лежат в Git (DuckDB MVP; Trino/CH — позже в CI Variables).
+- [x] **A.5** — проект в `platform-service/dbt/`.
+- [ ] **A.5** — зелёный CI `validate_dbt` или локальный `dbt test` (проверить после push).
 - [ ] (Опционально) **A.4** — сгенерированы `dbt docs` и просмотрен lineage.
 
 ### Трек B — Trino
