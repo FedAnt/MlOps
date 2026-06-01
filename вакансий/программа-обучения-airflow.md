@@ -2,6 +2,8 @@
 
 Документ фиксирует **маршрут изучения** Airflow в связке с общим планом [`план-практики-инфраструктура-senior-devops.md`](./план-практики-инфраструктура-senior-devops.md) (**Фаза 4**: MinIO, Airflow, dbt, ClickHouse, Trino).
 
+**Карта всего курса:** [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md).
+
 **Следующий курс после базового трека (уроки 1–5):** [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) — затем возврат к **разделу 6** ниже.
 
 **Артефакты в репозитории:** `platform-service/docs/airflow-baseline.md`, DAG `airflow/dags/`, Helm `helm/airflow/values-dev.yaml`, CI job `deploy_airflow_dev`.
