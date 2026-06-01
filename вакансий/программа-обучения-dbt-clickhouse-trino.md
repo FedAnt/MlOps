@@ -36,9 +36,19 @@
 
 **Артефакт:** [`platform-service/docs/dbt-baseline.md`](../../platform-service/docs/dbt-baseline.md), каталог `platform-service/dbt/`.
 
-### Урок A.2–A.5 (в работе)
+### Урок A.2–A.5 (закрыт, 2026-05-19)
 
-Скелет проекта и CI `validate_dbt` в репозитории; закрыть чеклист A после зелёного pipeline и локального `dbt test`.
+**Сделано:** каталог `platform-service/dbt/` (DuckDB MVP), модель `stg_profiles`, seed `raw_profiles`, `sources.yml`, generic tests; CI job **`validate_dbt`** (`seed` + `run` + `test` + `compile`) на shell runner (pipx + fallback docker); макрос `generate_schema_name` (схемы `raw`/`staging`); runbook [`dbt-baseline.md`](../../platform-service/docs/dbt-baseline.md).
+
+**Артефакт:** зелёный pipeline `main` (job `validate_dbt`); коммиты в `platform-service` (ветка `main`).
+
+**Критерий:** трек A закрыт — staging-модель и тесты проходят в CI.
+
+### Урок B.1 (в работе)
+
+**Смысл:** Trino — federated SQL над lake (MinIO + catalog); ad-hoc и проверки слоёв `raw`/`staging`, витрины — ClickHouse (трек C).
+
+**Следующий артефакт:** `helm/trino/` в `platform-infra` или `platform-service`, namespace `data-platform-query`, runbook endpoint.
 
 *(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
 
@@ -295,8 +305,10 @@ flowchart LR
 - [x] **A.4** — на MR gate `validate_dbt` (`seed` + `run` + `test` + `compile`).
 - [x] **A.4** — credentials не лежат в Git (DuckDB MVP; Trino/CH — позже в CI Variables).
 - [x] **A.5** — проект в `platform-service/dbt/`.
-- [ ] **A.5** — зелёный CI `validate_dbt` или локальный `dbt test` (проверить после push).
+- [x] **A.5** — зелёный CI `validate_dbt` (2026-05-19, pipeline `main`).
 - [ ] (Опционально) **A.4** — сгенерированы `dbt docs` и просмотрен lineage.
+
+**Трек A — закрыт** (2026-05-19). Дальше: **трек B (Trino)**.
 
 ### Трек B — Trino
 
@@ -321,7 +333,7 @@ flowchart LR
 ### Трек D — сквозной сценарий
 
 - [ ] **D.1** — данные в `raw` без ручных правок в обход пайплайна.
-- [ ] **D.2** — dbt довёл данные до `staging` с проходящими тестами.
+- [x] **D.2** — dbt довёл данные до `staging` с проходящими тестами (MVP DuckDB в CI; MinIO/Trino — в треках B/D).
 - [ ] **D.3** — Trino подтверждает данные staging/lake.
 - [ ] **D.4** — витрина доступна в ClickHouse.
 - [ ] **D.5** — отмечено в журнале: готовность к Airflow §6 (пункты 6.4–6.5).
@@ -330,7 +342,7 @@ flowchart LR
 
 - [ ] MinIO: buckets `raw/staging/marts` (уже сделано на предыдущих шагах Фазы 4).
 - [ ] Airflow DAG по расписанию/вручную (базовый трек).
-- [ ] Минимум 1 dbt-модель и 1 dbt-test.
+- [x] Минимум 1 dbt-модель и 1 dbt-test (`stg_profiles`, CI `validate_dbt`).
 - [ ] Данные из `raw` в `staging` без ручных правок.
 - [ ] Runbook после сбоя DAG/dbt/job (можно объединить с Airflow 6.5).
 
