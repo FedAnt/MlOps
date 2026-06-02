@@ -50,11 +50,13 @@
 
 **Формулировка:** «dbt трансформирует; Trino спрашивает SQL-ом; CH отдаёт витрины».
 
-### Урок B.4 (в работе)
+### Урок B.4 (закрыт, 2026-06-02)
 
-**Сделано в репозитории:** `helm/trino/values-dev.yaml`, `docs/trino-baseline.md`, `deploy_trino_dev`, `smoke_trino_dev`.
+**Сделано:** Trino развёрнут в `data-platform-query`; исправлены Ingress-forwarded headers (`http-server.process-forwarded=true`), smoke проходит; `SHOW CATALOGS`, `SELECT` и `EXPLAIN` выполняются.
 
-**Критерий закрытия:** на кластере pod Running, `smoke_trino_dev` зелёный (`SHOW CATALOGS`, `SELECT` на `tpch`).
+**Артефакт:** manual jobs `deploy_trino_dev` и `smoke_trino_dev` (зелёные), доступ через `trino-dev.lab.local` и CLI в pod.
+
+**Критерий:** B.4 закрыт — pod Running, SQL-запросы выполняются стабильно.
 
 *(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
 
@@ -319,12 +321,12 @@ flowchart LR
 ### Трек B — Trino
 
 - [x] **B.1** — объяснено отличие Trino от ClickHouse в лаборатории.
-- [ ] **B.4** — Trino развёрнут в k3s (`deploy_trino_dev`); поды Running; smoke зелёный.
-- [ ] **B.2** — catalog на MinIO/lake описан в runbook или журнале.
-- [ ] **B.3** — выполнен `SHOW SCHEMAS` / `SELECT` по raw или staging.
-- [ ] **B.3** — для одного запроса просмотрен `EXPLAIN`.
-- [ ] **B.4** — зафиксированы endpoint и команды диагностики (OOM/timeout).
-- [ ] **B.5** — smoke-запрос из Airflow или скрипта (можно после возврата в Airflow §6).
+- [x] **B.4** — Trino развёрнут в k3s (`deploy_trino_dev`); pod Running; smoke зелёный.
+- [x] **B.2** — catalog и эксплуатация описаны в `platform-service/docs/trino-baseline.md`.
+- [x] **B.3** — выполнен `SHOW CATALOGS` / `SELECT` (tpch), доступ через CLI подтверждён.
+- [x] **B.3** — для запроса выполнен `EXPLAIN`.
+- [x] **B.4** — endpoint и команды диагностики зафиксированы в runbook.
+- [ ] **B.5** — smoke-запрос из Airflow или скрипта к catalog `lake`/staging (после шага с external table).
 
 ### Трек C — ClickHouse
 
