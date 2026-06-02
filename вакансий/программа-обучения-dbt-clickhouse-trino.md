@@ -325,6 +325,7 @@ flowchart LR
 - [x] **B.2** — catalog и эксплуатация описаны в `platform-service/docs/trino-baseline.md`.
 - [x] **B.3** — выполнен `SHOW CATALOGS` / `SELECT` (tpch), доступ через CLI подтверждён.
 - [x] **B.3** — для запроса выполнен `EXPLAIN`.
+- [x] **B.3 (lake)** — `SHOW SCHEMAS FROM lake` выполняется (catalog `lake` подключён, Trino + MinIO).
 - [x] **B.4** — endpoint и команды диагностики зафиксированы в runbook.
 - [ ] **B.5** — smoke-запрос из Airflow или скрипта к catalog `lake`/staging (после шага с external table).
 
@@ -342,7 +343,7 @@ flowchart LR
 
 - [ ] **D.1** — данные в `raw` без ручных правок в обход пайплайна.
 - [x] **D.2** — dbt довёл данные до `staging` с проходящими тестами (MVP DuckDB в CI; MinIO/Trino — в треках B/D).
-- [ ] **D.3** — Trino подтверждает данные staging/lake.
+- [x] **D.3** — Trino подтверждает доступ к lake (`SHOW SCHEMAS FROM lake`).
 - [ ] **D.4** — витрина доступна в ClickHouse.
 - [ ] **D.5** — отмечено в журнале: готовность к Airflow §6 (пункты 6.4–6.5).
 
