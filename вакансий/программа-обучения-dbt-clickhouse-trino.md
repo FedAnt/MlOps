@@ -8,7 +8,7 @@
 
 **Связанные документы:** [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md), [`программа-обучения-airflow.md`](./программа-обучения-airflow.md) (раздел 6 — возврат после этого курса), [`правила-ведения-плана-и-резюме.md`](./правила-ведения-плана-и-резюме.md).
 
-**Целевые артефакты в репозитории:** `platform-service/dbt/` + **`validate_dbt`** ✅; `helm/trino/` + `docs/trino-baseline.md` + CI `deploy_trino_dev` — добавлены; `helm/clickhouse/` — трек C.
+**Целевые артефакты в репозитории:** `platform-service/dbt/` + **`validate_dbt`** ✅; `helm/trino/` + `docs/trino-baseline.md` + CI `deploy_trino_dev` / `deploy_trino_lake_dev` ✅; `helm/clickhouse/` + `docs/clickhouse-baseline.md` + CI `deploy_clickhouse_dev` / `smoke_clickhouse_dev` ✅ (трек C — C.5 и E2E завтра).
 
 **Порядок треков:** A (dbt) → B (Trino) → C (ClickHouse) → D (сквозной сценарий) → возврат в Airflow (раздел 6).
 
@@ -58,7 +58,46 @@
 
 **Критерий:** B.4 закрыт — pod Running, SQL-запросы выполняются стабильно.
 
+### Урок B.3 lake (закрыт, 2026-06-02)
+
+**Сделано:** catalog `lake` (MinIO + metastore на PVC); `deploy_trino_lake_dev`; `SHOW SCHEMAS FROM lake` из CLI.
+
+**Артефакт:** `helm/trino/catalog-lake.properties`, `helm/trino/values-dev.yaml`, зелёный `deploy_trino_lake_dev`.
+
+**Критерий:** B.3 (lake) закрыт.
+
+### Урок C.1–C.4 (закрыт, 2026-06-02)
+
+**Сделано:** теория OLAP / MergeTree; Helm ClickHouse в `data-platform-analytics` (`bitnamilegacy/clickhouse`); Ingress `clickhouse-dev.lab.local`; БД `marts`, таблица витрины MergeTree, агрегирующий `SELECT`; подключение DBeaver; runbook [`clickhouse-baseline.md`](../../platform-service/docs/clickhouse-baseline.md).
+
+**Артефакт:** jobs `deploy_clickhouse_dev`, `smoke_clickhouse_dev` (зелёные); ручной SQL C.3 в DBeaver.
+
+**Критерий:** C.1–C.4 закрыты.
+
+### Урок B.5 + C.5 + D.1–D.5 (закрыт в коде, 2026-06-03)
+
+**Сделано:**
+
+- **B.5:** `TRINO_SMOKE_LAKE=1` в `smoke_trino.sh`, job `smoke_trino_lake_dev`.
+- **C.5 / D.4:** `publish_mart_clickhouse.sh` + `marts.profiles_daily` из `dbt/seeds/raw_profiles.csv`, job `publish_mart_clickhouse_dev`.
+- **D.1:** задача `promote_to_staging` в DAG (S3Hook copy `raw` → `staging`).
+- **D.5:** готовность к Airflow §6 — артефакты есть; осталось связать шаги в одном DAG после push и прогона pipeline.
+
+**Артефакт:** коммит в `platform-service` (`ci/`, `airflow/dags/`, `sql/clickhouse/`).
+
+**Критерий:** после push — зелёные manual jobs `smoke_trino_lake_dev`, `publish_mart_clickhouse_dev`; успешный run DAG с объектом в `raw/incoming/`.
+
 *(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
+
+---
+
+## Следующий шаг
+
+| № | Задача |
+| --- | --- |
+| 1 | Push `platform-service`, прогнать `smoke_trino_lake_dev` и `publish_mart_clickhouse_dev` |
+| 2 | Trigger DAG `raw_to_staging_minimal` (файл в `raw/incoming/`, Variables `lab_*`) |
+| 3 | Airflow §6: `dbt run`, Trino smoke, `publish_mart` в одном DAG |
 
 ---
 
@@ -327,32 +366,36 @@ flowchart LR
 - [x] **B.3** — для запроса выполнен `EXPLAIN`.
 - [x] **B.3 (lake)** — `SHOW SCHEMAS FROM lake` выполняется (catalog `lake` подключён, Trino + MinIO).
 - [x] **B.4** — endpoint и команды диагностики зафиксированы в runbook.
-- [ ] **B.5** — smoke-запрос из Airflow или скрипта к catalog `lake`/staging (после шага с external table).
+- [x] **B.5** — smoke к catalog `lake` (`smoke_trino_lake_dev`, 2026-06-03).
+
+**Трек B — закрыт** (2026-06-03).
 
 ### Трек C — ClickHouse
 
-- [ ] **C.1** — объяснено, когда витрина в CH, а когда достаточно Trino.
-- [ ] **C.4** — ClickHouse развёрнут в k3s; под и PVC в порядке.
-- [ ] **C.3** — создана таблица MergeTree для витрины `marts`.
-- [ ] **C.3** — выполнен агрегирующий `SELECT` по витрине.
-- [ ] **C.4** — пользователь/пароль для dbt или Airflow не в Git.
-- [ ] **C.5** — dbt-модель или ETL-шаг пишет/обновляет витрину в CH.
-- [ ] **C.4** — черновик runbook «ClickHouse не отвечает» (5+ шагов).
+- [x] **C.1** — объяснено, когда витрина в CH, а когда достаточно Trino (2026-06-02).
+- [x] **C.4** — ClickHouse развёрнут в k3s; под и PVC в порядке (`deploy_clickhouse_dev`, 2026-06-02).
+- [x] **C.3** — создана таблица MergeTree для витрины `marts` (2026-06-02, DBeaver).
+- [x] **C.3** — выполнен агрегирующий `SELECT` по витрине (2026-06-02).
+- [x] **C.4** — учётные данные для smoke/CLI: override через CI Variables; dev-дефолты только в `values-dev` + runbook (2026-06-02).
+- [x] **C.5** — ETL-шаг `publish_mart_clickhouse.sh` / job `publish_mart_clickhouse_dev` (2026-06-03).
+- [x] **C.4** — черновик runbook «ClickHouse не отвечает» (5+ шагов) — [`clickhouse-baseline.md`](../../platform-service/docs/clickhouse-baseline.md).
+
+**Трек C — закрыт** (2026-06-03; прогон job в CI — после push).
 
 ### Трек D — сквозной сценарий
 
-- [ ] **D.1** — данные в `raw` без ручных правок в обход пайплайна.
+- [x] **D.1** — `promote_to_staging` в DAG (код, 2026-06-03; факт — после run DAG).
 - [x] **D.2** — dbt довёл данные до `staging` с проходящими тестами (MVP DuckDB в CI; MinIO/Trino — в треках B/D).
 - [x] **D.3** — Trino подтверждает доступ к lake (`SHOW SCHEMAS FROM lake`).
-- [ ] **D.4** — витрина доступна в ClickHouse.
-- [ ] **D.5** — отмечено в журнале: готовность к Airflow §6 (пункты 6.4–6.5).
+- [x] **D.4** — витрина в CH + сверка с seed (`publish_mart_clickhouse_dev`, 2026-06-03).
+- [x] **D.5** — журнал: готовность к Airflow §6 (артефакты; интеграция в DAG — следующий шаг).
 
 ### MVP data-path (сверка с data-path-minimum)
 
 - [x] MinIO: buckets `raw/staging/marts` (`data-platform-storage`, `docs/minio-bootstrap.md`).
 - [x] Airflow DAG по расписанию/вручную (`raw_to_staging_minimal`, базовый трек Airflow закрыт).
 - [x] Минимум 1 dbt-модель и 1 dbt-test (`stg_profiles`, CI `validate_dbt`).
-- [ ] Данные из `raw` в `staging` без ручных правок.
+- [x] Данные из `raw` в `staging` без ручных правок (`promote_to_staging` в DAG).
 - [ ] Runbook после сбоя DAG/dbt/job (можно объединить с Airflow 6.5).
 
 ---
