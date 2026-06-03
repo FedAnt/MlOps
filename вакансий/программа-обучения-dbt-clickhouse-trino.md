@@ -8,7 +8,7 @@
 
 **Связанные документы:** [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md), [`программа-обучения-airflow.md`](./программа-обучения-airflow.md) (раздел 6 — возврат после этого курса), [`правила-ведения-плана-и-резюме.md`](./правила-ведения-плана-и-резюме.md).
 
-**Целевые артефакты в репозитории:** `platform-service/dbt/` + **`validate_dbt`** ✅; `helm/trino/` + `docs/trino-baseline.md` + CI `deploy_trino_dev` / `deploy_trino_lake_dev` ✅; `helm/clickhouse/` + `docs/clickhouse-baseline.md` + CI `deploy_clickhouse_dev` / `smoke_clickhouse_dev` ✅ (трек C — C.5 и E2E завтра).
+**Целевые артефакты в репозитории:** `platform-service/dbt/` + **`validate_dbt`** ✅; `helm/trino/` + CI lake smoke ✅; `helm/clickhouse/` + **`publish_mart_clickhouse_dev`** ✅; DAG `promote_to_staging` ✅. **Программа A–D закрыта** (2026-06-03).
 
 **Порядок треков:** A (dbt) → B (Trino) → C (ClickHouse) → D (сквозной сценарий) → возврат в Airflow (раздел 6).
 
@@ -87,16 +87,24 @@
 
 **Критерий:** треки B–D и MVP data-path по факту — закрыты.
 
-*(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
+*(Базовый трек Airflow закрыт 2026-05-15; §6.1–6.5 — 2026-06-03. Следующая сессия Airflow: **§6.6** 2026-06-04.)*
+
+### Сессия синхронизации (2026-06-03, закрыт)
+
+**Сделано:** зафиксирован прогресс A–D и MVP; уточнено, что повтор dbt A.1 / Airflow 1–5 не является текущим шагом курса.
+
+**Артефакт:** обновлены `карта-курса-лаборатории.md`, `план-практики`, программы обучения.
 
 ---
 
-## Следующий шаг
+## Следующий шаг (вне этой программы)
 
-| № | Задача |
-| --- | --- |
-| 1 | **Airflow §6** — в `raw_to_staging_minimal` (или новый DAG): `dbt run`, Trino smoke, `publish_mart_clickhouse.sh` |
-| 2 | **Фаза 5** — [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md) |
+| № | Когда | Задача |
+| --- | --- | --- |
+| 1 | **2026-06-04** | **Airflow §6.6** — [`программа-обучения-airflow.md`](./программа-обучения-airflow.md), чеклист 6.6.1–6.6.5 |
+| 2 | После §6.6 | **Фаза 5** — [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md) |
+
+**Не начинать заново:** треки A–D и чеклист §0 — уже `[x]` (см. журнал выше).
 
 ---
 
@@ -397,7 +405,7 @@ flowchart LR
 - [x] Airflow DAG по расписанию/вручную (`raw_to_staging_minimal`, базовый трек Airflow закрыт).
 - [x] Минимум 1 dbt-модель и 1 dbt-test (`stg_profiles`, CI `validate_dbt`).
 - [x] Данные из `raw` в `staging` без ручных правок (`promote_to_staging` в DAG).
-- [ ] Runbook после сбоя DAG/dbt/job (можно объединить с Airflow 6.5).
+- [x] Runbook после сбоя DAG/dbt/job — [`airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md), [`dbt-baseline.md`](../../platform-service/docs/dbt-baseline.md) (2026-06-03).
 
 ---
 

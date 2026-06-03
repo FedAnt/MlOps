@@ -32,11 +32,19 @@
 
 `deploy_airflow_dev` с **`AIRFLOW_FERNET_KEY`** / **`AIRFLOW_WEBSERVER_SECRET_KEY`**; Helm revision **13**, поды Running; диагностика OOM / «no available server».
 
-### Базовый трек Airflow (уроки 1–5) — завершён
+### Базовый трек Airflow (уроки 1–5) — завершён (2026-05-15)
 
-Дальше — [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) (треки dbt → Trino → ClickHouse). **Возврат к Airflow** — **раздел 6** и чеклист **6.1–6.5** (сквозной DAG с оркестрацией уже развёрнутых инструментов).
+Дальше — [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) (треки A–D **закрыты** 2026-06-03).
 
-**Перед паузой (5 мин):** после смены Fernet проверьте Connection **`minio_lab`** (при ошибке в `validate_raw_zone` — пересоздайте connection в UI) и один **Trigger** DAG.
+### §6.1–6.5 (база сквозного DAG) — завершён (2026-06-03)
+
+Ретраи на `validate_raw_zone`, runbook [`platform-service/docs/airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md), DAG `raw_to_staging_minimal` с MinIO (`promote_to_staging`).
+
+### §6.6 (интеграция dbt / Trino / CH) — **на завтра 2026-06-04**
+
+В DAG после `promote_to_staging`: вызов **dbt run**, **Trino smoke**, **`publish_mart_clickhouse.sh`**. Чеклист — в конце документа, раздел **6.6**. **Не повторять** уроки 1–5 и dbt A.1.
+
+**Перед сессией §6.6:** Connection **`minio_lab`** на месте; в `raw/incoming/` есть объект под `lab_raw_prefix`.
 
 ---
 
@@ -165,15 +173,34 @@
 - [x] **6.4** — осмысленные ретраи на шаге, зависящем от внешней системы (`validate_raw_zone`: 3 retry, exponential backoff, timeout; внутренние задачи `retries=0`).
 - [x] **6.5** — короткий runbook: [`platform-service/docs/airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md).
 
+### Раздел 6.6. Интеграция стека (**завтра 2026-06-04**)
+
+Предусловия: треки A–D в [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) закрыты; CI `validate_dbt`, `smoke_trino_lake_dev`, `publish_mart_clickhouse_dev` — зелёные.
+
+- [ ] **6.6.1** — в DAG добавлен шаг **dbt** (`dbt run` / job в pod или BashOperator по `dbt-baseline.md`).
+- [ ] **6.6.2** — шаг **Trino smoke** (`SHOW SCHEMAS FROM lake` или эквивалент из pod/CLI).
+- [ ] **6.6.3** — шаг **ClickHouse** (`publish_mart_clickhouse.sh` или вызов CI-скрипта).
+- [ ] **6.6.4** — явные зависимости: MinIO → promote → dbt → Trino → CH (или согласованный порядок в Graph).
+- [ ] **6.6.5** — один **Trigger** DAG Run: все новые задачи **success**; скрин/заметка run id в журнале ниже.
+
+### Журнал §6.6
+
+```text
+### Урок 6.6 (статус: на завтра 2026-06-04)
+Сделано: …
+Артефакт: коммит platform-service, run id Airflow
+Критерий: чеклист 6.6.1–6.6.5 [x]
+```
+
 ---
 
 ## Возврат после изучения других продуктов из списка Фазы 4
 
 **Список продуктов Фазы 4** (помимо уже поднятого MinIO и Airflow): **dbt**, **ClickHouse**, **Trino** — маршрут обучения: [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md); практика в [`план-практики-инфраструктура-senior-devops.md`](./план-практики-инфраструктура-senior-devops.md), раздел «Фаза 4».
 
-**На какой шаг вернуться:** к **разделу 6** этой программы и чеклисту — с пункта **6.1** («Сквозной мини-проект»). Имеется в виду: не перечитывать с нуля разделы 1–5, а **добавить в DAG оркестрацию уже освоенных инструментов** (вызов dbt, шаг с Trino, публикация в ClickHouse и т.д.) и довести **6.1–6.5** до выполнения.
+**На какой шаг вернуться (2026-06-03):** к **§6.6** чеклиста — оркестрация dbt / Trino / CH в DAG. Пункты **6.1–6.5** уже закрыты; разделы 1–5 и dbt A–D **не повторять** с нуля.
 
-Если раздел 6 **ещё не начинали** до ухода на dbt/CH/Trino — всё равно **вход в Airflow после них** с пункта **6.1**; разделы 1–5 при необходимости используйте как справочник, не как обязательный повтор с нуля.
+Если §6.6 ещё не начинали — старт с **6.6.1**; разделы 1–5 и 6.1–6.5 — только как справочник.
 
 **Связь с общим планом:** это соответствует завершению практики Фазы 4 по пункту «несколько DAG с зависимостями» и **интеграции с GitLab CI** для артефактов DAG/моделей — после того, как остальные движки в стеке уже знакомы.
 

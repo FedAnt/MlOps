@@ -58,14 +58,29 @@
 - В `platform-service` успешно выполнен практический deploy MinIO в `data-platform-storage` и инициализированы buckets `raw/staging/marts`.
 - В `platform-service` подготовлен Airflow baseline: DAG-каркас `airflow/dags/raw_to_staging.py`, `helm/airflow/values-dev.yaml`, job `validate_airflow_dags`, manual `deploy_airflow_dev`, документ `docs/airflow-baseline.md`.
 - Пройден базовый трек Airflow (уроки 1–5, [`программа-обучения-airflow.md`](./программа-обучения-airflow.md)): деплой в k3s (Helm revision 13), Ingress `airflow-dev.lab.local`, DAG `raw_to_staging_minimal` (params, Variables, Connection `minio_lab`, S3Hook → MinIO), стабильные `AIRFLOW_FERNET_KEY` / `AIRFLOW_WEBSERVER_SECRET_KEY` в GitLab CI; run с `validate_raw_zone` success (`keys_found=1`).
+- Пройдена программа **dbt / Trino / ClickHouse** (треки A–D, 2026-06-03): CI `validate_dbt`, `smoke_trino_lake_dev`, `publish_mart_clickhouse_dev`, DAG `promote_to_staging`; см. [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md).
+- Airflow §6.1–6.5: ретраи на `validate_raw_zone`, runbook [`platform-service/docs/airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md).
+- MinIO Web Console через Ingress **`minio-dev.lab.local`** (Traefik, console :9001); учётные данные лаборатории в `minio-bootstrap.md` (`minio_admin` / `minio_password`).
+- MVP data-path по [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md) — критерии закрыты (2026-06-03).
 
-### В работе (ближайший шаг)
+### На завтра (2026-06-04)
 
-- **Трек A (dbt):** [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) — уроки A.1–A.5 (проект `dbt/`, `dbt run`/`test`, CI gate).
+Сводка: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md) §«На завтра».
 
-### Предстоит
+1. **Airflow §6.6** — в DAG после `promote_to_staging`: `dbt run`, Trino smoke, `publish_mart_clickhouse.sh`; один успешный Trigger всей цепочки.
+2. Обновить чеклист §6.6 в [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).
 
-- Фазы 1-8 по плану: контейнеризация сервиса, IaC, GitLab CI для data-кода, Airflow+dbt+ClickHouse+Trino, observability, DR/надежность, безопасность, упаковка под резюме/интервью.
+### В работе (текущая точка курса)
+
+- **Airflow §6.6** — оркестрация уже развёрнутых **dbt** / **Trino** / **ClickHouse** (не повторять треки A–D).
+
+### Предстоит (после §6.6)
+
+- **Фаза 5** — observability: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md).
+
+### Предстоит (долгий хвост)
+
+- Observability (фаза 5), DR/надёжность, безопасность, упаковка под резюме/интервью (фазы 6–8).
 
 ---
 
@@ -367,7 +382,7 @@
 | 1 | Завершено | недели 2-3 | 2026-05-06 | platform-infra (main) | Data-service: Docker -> Registry -> Helm deploy + Ingress + smoke-check |
 | 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
 | 3 | Завершено | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality + docs + SLA/SLO) | Введены quality gates, policy-driven проверки, CI-стандарты, staging checklist и эксплуатационные SLO |
-| 4 | В работе | недели 8-10 | 2026-06-03 | platform-service | MinIO, dbt, Trino (lake), CH (publish_mart), DAG raw→staging ✅; осталось: Airflow §6 (оркестрация dbt/Trino/CH), observability |
+| 4 | В работе | недели 8-10 | 2026-06-03 | platform-service | 4a–4b ✅ (MinIO, AF 1–5, dbt A–D, E2E); **завтра 2026-06-04:** AF §6.6 (dbt/Trino/CH в DAG); затем observability |
 | 5 | Не начато | недели 10-12 |  |  |  |
 | 6 | Не начато | недели 12-14 |  |  |  |
 | 7 | Не начато | недели 14-15 |  |  |  |
