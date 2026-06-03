@@ -367,7 +367,7 @@
 | 1 | Завершено | недели 2-3 | 2026-05-06 | platform-infra (main) | Data-service: Docker -> Registry -> Helm deploy + Ingress + smoke-check |
 | 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
 | 3 | Завершено | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality + docs + SLA/SLO) | Введены quality gates, policy-driven проверки, CI-стандарты, staging checklist и эксплуатационные SLO |
-| 4 | В работе | недели 8-10 | 2026-06-02 | platform-service (MinIO, Airflow, dbt, Trino, CH) | dbt CI ✅; Trino + lake catalog ✅; ClickHouse + ручная витрина `marts` ✅; осталось: B.5 smoke lake, C.5 E2E, DAG §6 |
+| 4 | В работе | недели 8-10 | 2026-06-03 | platform-service | MinIO, dbt, Trino (lake), CH (publish_mart), DAG raw→staging ✅; осталось: Airflow §6 (оркестрация dbt/Trino/CH), observability |
 | 5 | Не начато | недели 10-12 |  |  |  |
 | 6 | Не начато | недели 12-14 |  |  |  |
 | 7 | Не начато | недели 14-15 |  |  |  |

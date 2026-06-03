@@ -74,18 +74,18 @@
 
 **Критерий:** C.1–C.4 закрыты.
 
-### Урок B.5 + C.5 + D.1–D.5 (закрыт в коде, 2026-06-03)
+### Урок B.5 + C.5 + D (закрыт, 2026-06-03)
 
 **Сделано:**
 
-- **B.5:** `TRINO_SMOKE_LAKE=1` в `smoke_trino.sh`, job `smoke_trino_lake_dev`.
-- **C.5 / D.4:** `publish_mart_clickhouse.sh` + `marts.profiles_daily` из `dbt/seeds/raw_profiles.csv`, job `publish_mart_clickhouse_dev`.
-- **D.1:** задача `promote_to_staging` в DAG (S3Hook copy `raw` → `staging`).
-- **D.5:** готовность к Airflow §6 — артефакты есть; осталось связать шаги в одном DAG после push и прогона pipeline.
+- **B.5:** `smoke_trino_lake_dev` — зелёный (`SHOW SCHEMAS FROM lake`).
+- **C.5 / D.4:** `publish_mart_clickhouse_dev` — зелёный (`marts.profiles_daily` из seed).
+- **D.1:** run DAG `raw_to_staging_minimal` — `promote_to_staging`, копирование `raw/incoming/` → `staging/processed/`.
+- **D.5:** готовность к Airflow §6 — артефакты и ручные прогоны закрыты.
 
-**Артефакт:** коммит в `platform-service` (`ci/`, `airflow/dags/`, `sql/clickhouse/`).
+**Артефакт:** `platform-service` (CI jobs, DAG, `publish_mart_clickhouse.sh`).
 
-**Критерий:** после push — зелёные manual jobs `smoke_trino_lake_dev`, `publish_mart_clickhouse_dev`; успешный run DAG с объектом в `raw/incoming/`.
+**Критерий:** треки B–D и MVP data-path по факту — закрыты.
 
 *(Базовый трек Airflow закрыт 2026-05-15 — см. [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).)*
 
@@ -95,9 +95,8 @@
 
 | № | Задача |
 | --- | --- |
-| 1 | Push `platform-service`, прогнать `smoke_trino_lake_dev` и `publish_mart_clickhouse_dev` |
-| 2 | Trigger DAG `raw_to_staging_minimal` (файл в `raw/incoming/`, Variables `lab_*`) |
-| 3 | Airflow §6: `dbt run`, Trino smoke, `publish_mart` в одном DAG |
+| 1 | **Airflow §6** — в `raw_to_staging_minimal` (или новый DAG): `dbt run`, Trino smoke, `publish_mart_clickhouse.sh` |
+| 2 | **Фаза 5** — [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md) |
 
 ---
 
@@ -380,15 +379,17 @@ flowchart LR
 - [x] **C.5** — ETL-шаг `publish_mart_clickhouse.sh` / job `publish_mart_clickhouse_dev` (2026-06-03).
 - [x] **C.4** — черновик runbook «ClickHouse не отвечает» (5+ шагов) — [`clickhouse-baseline.md`](../../platform-service/docs/clickhouse-baseline.md).
 
-**Трек C — закрыт** (2026-06-03; прогон job в CI — после push).
+**Трек C — закрыт** (2026-06-03; `publish_mart_clickhouse_dev` зелёный).
 
 ### Трек D — сквозной сценарий
 
-- [x] **D.1** — `promote_to_staging` в DAG (код, 2026-06-03; факт — после run DAG).
+- [x] **D.1** — `promote_to_staging`: run DAG, объекты в `staging/processed/` (2026-06-03).
 - [x] **D.2** — dbt довёл данные до `staging` с проходящими тестами (MVP DuckDB в CI; MinIO/Trino — в треках B/D).
 - [x] **D.3** — Trino подтверждает доступ к lake (`SHOW SCHEMAS FROM lake`).
 - [x] **D.4** — витрина в CH + сверка с seed (`publish_mart_clickhouse_dev`, 2026-06-03).
-- [x] **D.5** — журнал: готовность к Airflow §6 (артефакты; интеграция в DAG — следующий шаг).
+- [x] **D.5** — журнал: готовность к Airflow §6 (2026-06-03).
+
+**Трек D — закрыт** (2026-06-03).
 
 ### MVP data-path (сверка с data-path-minimum)
 
