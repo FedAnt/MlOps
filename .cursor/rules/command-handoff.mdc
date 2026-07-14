@@ -1,0 +1,15 @@
+---
+description: После значимой сессии обновить handoff для command
+globs:
+alwaysApply: true
+---
+
+# Мост в command
+
+После значимой учебной сессии, mock interview или смены фокуса курса:
+
+1. Обнови `docs/command-handoff.md` (**≤40 строк**).
+2. Сообщи пользователю синхронизировать зеркало в  
+   `/home/user/works/command/career/data/learning/mlops-external-summary.md`.
+
+Не копируй весь курс в command. Только саммари для планирования карьеры и ритма.
