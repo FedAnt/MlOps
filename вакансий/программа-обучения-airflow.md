@@ -40,11 +40,9 @@
 
 Ретраи на `validate_raw_zone`, runbook [`platform-service/docs/airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md), DAG `raw_to_staging_minimal` с MinIO (`promote_to_staging`).
 
-### §6.6 (интеграция dbt / Trino / CH) — **на завтра 2026-06-04**
+### §6.6 (интеграция dbt / Trino / CH) — **закрыт 2026-07-14**
 
-В DAG после `promote_to_staging`: вызов **dbt run**, **Trino smoke**, **`publish_mart_clickhouse.sh`**. Чеклист — в конце документа, раздел **6.6**. **Не повторять** уроки 1–5 и dbt A.1.
-
-**Перед сессией §6.6:** Connection **`minio_lab`** на месте; в `raw/incoming/` есть объект под `lab_raw_prefix`.
+В DAG после `promote_to_staging`: **`run_dbt_transform`** (KPO + ConfigMap tar), **`trino_smoke_lake`**, **`verify_mart_clickhouse`**. Один Trigger — все задачи до `end` success. Эксплуатация: лимит scheduler **2Gi** (OOM при LocalExecutor), runbook обновлён.
 
 ---
 
@@ -173,22 +171,22 @@
 - [x] **6.4** — осмысленные ретраи на шаге, зависящем от внешней системы (`validate_raw_zone`: 3 retry, exponential backoff, timeout; внутренние задачи `retries=0`).
 - [x] **6.5** — короткий runbook: [`platform-service/docs/airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md).
 
-### Раздел 6.6. Интеграция стека (**завтра 2026-06-04**)
+### Раздел 6.6. Интеграция стека (**закрыт 2026-07-14**)
 
 Предусловия: треки A–D в [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md) закрыты; CI `validate_dbt`, `smoke_trino_lake_dev`, `publish_mart_clickhouse_dev` — зелёные.
 
-- [ ] **6.6.1** — в DAG добавлен шаг **dbt** (`dbt run` / job в pod или BashOperator по `dbt-baseline.md`).
-- [ ] **6.6.2** — шаг **Trino smoke** (`SHOW SCHEMAS FROM lake` или эквивалент из pod/CLI).
-- [ ] **6.6.3** — шаг **ClickHouse** (`publish_mart_clickhouse.sh` или вызов CI-скрипта).
-- [ ] **6.6.4** — явные зависимости: MinIO → promote → dbt → Trino → CH (или согласованный порядок в Graph).
-- [ ] **6.6.5** — один **Trigger** DAG Run: все новые задачи **success**; скрин/заметка run id в журнале ниже.
+- [x] **6.6.1** — в DAG добавлен шаг **dbt** (`run_dbt_transform`, KubernetesPodOperator + ConfigMap `airflow-dbt-project` / `dbt-project.tar.gz`).
+- [x] **6.6.2** — шаг **Trino smoke** (`trino_smoke_lake`: `SHOW SCHEMAS FROM lake` по HTTP).
+- [x] **6.6.3** — шаг **ClickHouse** (`verify_mart_clickhouse`: `SELECT count()` из `marts.profiles_daily`).
+- [x] **6.6.4** — явные зависимости: MinIO → promote → dbt → Trino → CH → end.
+- [x] **6.6.5** — один **Trigger** DAG Run: все задачи **success** (Grid целиком зелёный, 2026-07-14).
 
 ### Журнал §6.6
 
 ```text
-### Урок 6.6 (статус: на завтра 2026-06-04)
-Сделано: …
-Артефакт: коммит platform-service, run id Airflow
+### Урок 6.6 (статус: закрыт, 2026-07-14)
+Сделано: сквозной DAG raw_to_staging_minimal с dbt/Trino/CH; OOM scheduler → 2Gi; ConfigMap tar + RBAC.
+Артефакт: platform-service airflow/dags/*, helm/airflow/values-dev.yaml; зелёный Trigger в UI.
 Критерий: чеклист 6.6.1–6.6.5 [x]
 ```
 
@@ -198,11 +196,9 @@
 
 **Список продуктов Фазы 4** (помимо уже поднятого MinIO и Airflow): **dbt**, **ClickHouse**, **Trino** — маршрут обучения: [`программа-обучения-dbt-clickhouse-trino.md`](./программа-обучения-dbt-clickhouse-trino.md); практика в [`план-практики-инфраструктура-senior-devops.md`](./план-практики-инфраструктура-senior-devops.md), раздел «Фаза 4».
 
-**На какой шаг вернуться (2026-06-03):** к **§6.6** чеклиста — оркестрация dbt / Trino / CH в DAG. Пункты **6.1–6.5** уже закрыты; разделы 1–5 и dbt A–D **не повторять** с нуля.
+**Фаза 4 по Airflow закрыта (2026-07-14).** Следующий курс: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md). Разделы 1–6 этой программы — справочник, не повтор с нуля.
 
-Если §6.6 ещё не начинали — старт с **6.6.1**; разделы 1–5 и 6.1–6.5 — только как справочник.
-
-**Связь с общим планом:** это соответствует завершению практики Фазы 4 по пункту «несколько DAG с зависимостями» и **интеграции с GitLab CI** для артефактов DAG/моделей — после того, как остальные движки в стеке уже знакомы.
+**Связь с общим планом:** завершена практика Фазы 4 по оркестрации data-path в одном DAG.
 
 ---
 

@@ -62,21 +62,13 @@
 - Airflow §6.1–6.5: ретраи на `validate_raw_zone`, runbook [`platform-service/docs/airflow-runbook.md`](../../platform-service/docs/airflow-runbook.md).
 - MinIO Web Console через Ingress **`minio-dev.lab.local`** (Traefik, console :9001); учётные данные лаборатории в `minio-bootstrap.md` (`minio_admin` / `minio_password`).
 - MVP data-path по [`platform-service/docs/data-path-minimum.md`](../../platform-service/docs/data-path-minimum.md) — критерии закрыты (2026-06-03).
-
-### На завтра (2026-06-04)
-
-Сводка: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md) §«На завтра».
-
-1. **Airflow §6.6** — в DAG после `promote_to_staging`: `dbt run`, Trino smoke, `publish_mart_clickhouse.sh`; один успешный Trigger всей цепочки.
-2. Обновить чеклист §6.6 в [`программа-обучения-airflow.md`](./программа-обучения-airflow.md).
+- **Airflow §6.6 закрыт (2026-07-14):** DAG `raw_to_staging_minimal` — `run_dbt_transform` → `trino_smoke_lake` → `verify_mart_clickhouse` → `end`; Grid целиком success. Scheduler memory **2Gi** (OOM при 1Gi / LocalExecutor). ConfigMap `airflow-dbt-project` (`dbt-project.tar.gz`), RBAC для KPO.
 
 ### В работе (текущая точка курса)
 
-- **Airflow §6.6** — оркестрация уже развёрнутых **dbt** / **Trino** / **ClickHouse** (не повторять треки A–D).
+Сводка: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md).
 
-### Предстоит (после §6.6)
-
-- **Фаза 5** — observability: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md).
+- **Фаза 5** — observability: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md), старт с §0.
 
 ### Предстоит (долгий хвост)
 
@@ -382,8 +374,8 @@
 | 1 | Завершено | недели 2-3 | 2026-05-06 | platform-infra (main) | Data-service: Docker -> Registry -> Helm deploy + Ingress + smoke-check |
 | 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
 | 3 | Завершено | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality + docs + SLA/SLO) | Введены quality gates, policy-driven проверки, CI-стандарты, staging checklist и эксплуатационные SLO |
-| 4 | В работе | недели 8-10 | 2026-06-03 | platform-service | 4a–4b ✅ (MinIO, AF 1–5, dbt A–D, E2E); **завтра 2026-06-04:** AF §6.6 (dbt/Trino/CH в DAG); затем observability |
-| 5 | Не начато | недели 10-12 |  |  |  |
+| 4 | Завершено | недели 8-10 | 2026-07-14 | platform-service | MinIO, AF 1–6, dbt A–D, Trino/CH, E2E DAG до `end` ✅; дальше — phase 5 observability |
+| 5 | В работе | недели 10-12 | 2026-07-14 |  | Старт: программа observability §0 |
 | 6 | Не начато | недели 12-14 |  |  |  |
 | 7 | Не начато | недели 14-15 |  |  |  |
 | 8 | Не начато | неделя 16+ |  |  |  |
