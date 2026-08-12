@@ -32,12 +32,12 @@
 
 *(Журнал: сессия 2026-07-14 — старт §0 после закрытия Фазы 4 / Airflow §6.6.)*
 
-### Урок §0 (статус: в работе, 2026-07-14)
+### Урок §0 (закрыт, 2026-08-12)
 
 Трек: общий ввод, §0.  
-Сделано: разбор ролей StatsD / Prometheus / Sentry / логов в лаборатории.  
-Артефакт: — (теория).  
-Критерий: разница метрика vs exception vs событие StatsD; роль exporter.
+Сделано: квиз — StatsD vs Prometheus, роль exporter, граница Sentry vs data-SLI.  
+Артефакт: ответы в сессии (уточнение: exporter — мост push→pull, не только «миграция»).  
+Критерий: закрыт.
 
 ---
 
@@ -249,8 +249,8 @@ flowchart LR
 
 ### Раздел 0
 
-- [ ] Прочитан §0; схема StatsD → exporter → Prometheus понятна.
-- [ ] Объяснена разница Sentry vs Prometheus.
+- [x] Прочитан §0; схема StatsD → exporter → Prometheus понятна.
+- [x] Объяснена разница Sentry vs Prometheus.
 
 ### Трек E — StatsD
 
