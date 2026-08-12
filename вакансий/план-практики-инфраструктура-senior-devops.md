@@ -68,7 +68,8 @@
 
 Сводка: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md).
 
-- **Фаза 5** — observability: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md), старт с §0.
+- **Фаза 5** — observability: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md), старт с §0; **минимум для рынка — трек F (Prometheus/Grafana)**.
+- **Фаза 5b** — Terraform/OpenTofu MVP: [`программа-обучения-terraform-opentofu.md`](./программа-обучения-terraform-opentofu.md) (после F; сигнал рынка remote ~400k).
 
 ### Предстоит (долгий хвост)
 
@@ -292,6 +293,24 @@
 
 ---
 
+### Фаза 5b. Terraform / OpenTofu MVP (после трека F, ~1–2 нед. вечерами)
+
+**Зачем:** срез `@devops_jobs_feed` 2026-08-04 — Terraform часто в JD remote Senior с верхом вилки ≥400k; Ansible в проде уже есть, нужен явный IaC-нарратив.
+
+**Маршрут:** [`программа-обучения-terraform-opentofu.md`](./программа-обучения-terraform-opentofu.md) (T0–T5).
+
+### Практика
+
+- OpenTofu или Terraform CLI; один провайдер под lab (kubernetes/helm/local — без обязательного AWS).
+- Модуль + tfvars; `validate`/`plan` в GitLab CI (apply — manual/локально).
+- Не раздувать в Terragrunt/multi-cloud до оффера.
+
+### Артефакт для резюме
+
+- «Описал lab-инфраструктуру как IaC (OpenTofu/Terraform); проверки plan/validate в CI».
+
+---
+
 ### Фаза 6. Надёжность: бэкапы, отказ, учение (недели 12–14)
 
 ### Практика
@@ -375,7 +394,8 @@
 | 2 | Завершено | недели 4-5 | 2026-05-06 | platform-infra + platform-service (main) | IaC-конвенции окружений и единый процесс деплоя для двух сервисов |
 | 3 | Завершено | недели 6-7 | 2026-05-06 | platform-infra + platform-service (CI quality + docs + SLA/SLO) | Введены quality gates, policy-driven проверки, CI-стандарты, staging checklist и эксплуатационные SLO |
 | 4 | Завершено | недели 8-10 | 2026-07-14 | platform-service | MinIO, AF 1–6, dbt A–D, Trino/CH, E2E DAG до `end` ✅; дальше — phase 5 observability |
-| 5 | В работе | недели 10-12 | 2026-07-14 |  | Старт: программа observability §0 |
+| 5 | В работе | недели 10-12 | 2026-07-14 |  | Старт: программа observability §0; приоритет рынка — трек F, затем 5b |
+| 5b | Не начато | после F |  |  | Terraform/OpenTofu MVP — см. программа TF |
 | 6 | Не начато | недели 12-14 |  |  |  |
 | 7 | Не начато | недели 14-15 |  |  |  |
 | 8 | Не начато | неделя 16+ |  |  |  |
