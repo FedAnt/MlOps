@@ -74,12 +74,13 @@
 Артефакт: helm/prometheus-local alerts.yml; docs/prometheus-baseline.md.  
 Критерий: закрыт (Inactive при up=1).
 
-### Урок F.5 (в работе, 2026-08-12)
+### Урок F.5 (закрыт, 2026-08-12)
 
 Трек F, § F5.  
-Сделано: `/metrics` в data-profile-service; scrape job в prometheus-local values; алерт DataProfileServiceDown.  
-Артефакт: app/main.py, requirements, helm/prometheus-local, docs/prometheus-baseline.md §F.5.  
-Критерий: после deploy сервиса + helm upgrade — `up{job="data-profile-service"}` = 1.
+Сделано: `/metrics` (prometheus-client, Py3.8); scrape job UP в Prometheus UI.  
+Артефакт: platform-service app + helm scrape; target  
+`data-profile-service.data-platform-dev.svc.cluster.local:80` = UP.  
+Критерий: закрыт.
 
 ---
 
@@ -310,7 +311,7 @@ flowchart LR
 - [x] **F.3** — выполнен PromQL-запрос для data-SLI или health.
 - [ ] **F.3** — (Опционально) дашборд Grafana с 2–3 панелями.
 - [x] **F.4** — одно alerting rule с аннотацией «что делать».
-- [ ] **F.5** — scrape Airflow или data-сервиса задокументирован.
+- [x] **F.5** — scrape Airflow или data-сервиса задокументирован.
 
 ### Трек G — Sentry
 
