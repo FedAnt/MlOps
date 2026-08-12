@@ -39,6 +39,48 @@
 Артефакт: ответы в сессии (уточнение: exporter — мост push→pull, не только «миграция»).  
 Критерий: закрыт.
 
+### Урок F.1 (закрыт, 2026-08-12)
+
+Трек F, § F1.  
+Сделано: квиз pull / `up` / job vs instance; разобрана cardinality.  
+Артефакт: — (теория).  
+Критерий: закрыт.
+
+### Урок F.2 (закрыт, 2026-08-12)
+
+Трек F, § F2.  
+Сделано: компоненты, static_configs, retention; chart `helm/prometheus-local/`, `docs/prometheus-baseline.md`.  
+Артефакт: platform-service helm/prometheus-local + prometheus-baseline.md.  
+Критерий: targets в prometheus.yml (job `prometheus` → localhost:9090) — найдены.
+
+### Урок F.4 deploy (закрыт, 2026-08-12)
+
+Трек F, § F4 (часть: развёртывание).  
+Сделано: Helm `prometheus-local` в `observability`; Status → Targets — job `prometheus` **UP**.  
+Артефакт: release в k3s; UI `prometheus-dev.lab.local`.  
+Критерий: targets UP — выполнен. Alerting rule — отдельно (позже в F.4).
+
+### Урок F.3 (закрыт, 2026-08-12)
+
+Трек F, § F3.  
+Сделано: `up{job="prometheus"}`=1; `prometheus_tsdb_head_series`≈837; `rate(prometheus_http_requests_total[5m])` — график есть.  
+Артефакт: запросы в UI.  
+Критерий: закрыт. Grafana — опционально, отложена.
+
+### Урок F.4 alert (закрыт, 2026-08-12)
+
+Трек F, § F4 (alerting).  
+Сделано: правило `PrometheusTargetDown` в UI Alerts (expr/for/annotations/runbook); Recreate из‑за PVC lock.  
+Артефакт: helm/prometheus-local alerts.yml; docs/prometheus-baseline.md.  
+Критерий: закрыт (Inactive при up=1).
+
+### Урок F.5 (в работе, 2026-08-12)
+
+Трек F, § F5.  
+Сделано: `/metrics` в data-profile-service; scrape job в prometheus-local values; алерт DataProfileServiceDown.  
+Артефакт: app/main.py, requirements, helm/prometheus-local, docs/prometheus-baseline.md §F.5.  
+Критерий: после deploy сервиса + helm upgrade — `up{job="data-profile-service"}` = 1.
+
 ---
 
 ## 0. Роли в observability (0.5 дня)
@@ -262,12 +304,12 @@ flowchart LR
 
 ### Трек F — Prometheus
 
-- [ ] **F.1** — pull-модель и labels.
-- [ ] **F.4** — Prometheus развёрнут; targets UP.
-- [ ] **F.2** — найден scrape config для exporter и сервиса.
-- [ ] **F.3** — выполнен PromQL-запрос для data-SLI или health.
+- [x] **F.1** — pull-модель и labels.
+- [x] **F.4** — Prometheus развёрнут; targets UP.
+- [x] **F.2** — найден scrape config для exporter и сервиса (self-scrape в `helm/prometheus-local`; доп. targets — F.5).
+- [x] **F.3** — выполнен PromQL-запрос для data-SLI или health.
 - [ ] **F.3** — (Опционально) дашборд Grafana с 2–3 панелями.
-- [ ] **F.4** — одно alerting rule с аннотацией «что делать».
+- [x] **F.4** — одно alerting rule с аннотацией «что делать».
 - [ ] **F.5** — scrape Airflow или data-сервиса задокументирован.
 
 ### Трек G — Sentry
