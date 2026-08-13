@@ -8,27 +8,27 @@
 
 ## Текущий фокус учёбы
 
-- **Фаза 5b OpenTofu T0–T5 ✅:** import, модуль, CI plan, буллет в резюме
-- **Следующее:** Sentry/H или фаза 6 DR; не углублять AF/dbt без цели
+- **G Bugsink ✅** + **F Prometheus ✅** + **5b OpenTofu ✅**
+- **Следующее:** фаза **6 DR** (рекомендую) или короткий трек H; E StatsD — опц.
 
 ## Готовность к интервью
 
-- Оценка: ~70% (data-path + Prom + TF MVP)
-- Сильные: K8s/GitLab CI, data-path E2E, Prometheus, OpenTofu
-- Пробелы: Sentry, DR, STAR; remote backend TF — stretch
+- Оценка: ~72–75% (data-path + Prom + Bugsink + TF)
+- Сильные: K8s/GitLab CI, data-path, Prom, OpenTofu, error tracking SDK
+- Пробелы: DR, STAR, security (фаза 7); StatsD не блокер при ELK в проде
 
 ## План на неделю
 
-1. Повторить 5 вопросов TF из программы
-2. Опционально StatsD/Sentry или DR
-3. Зеркало command уже синхронизировано
+1. Старт фазы 6 DR или H
+2. Не углублять AF/dbt
+3. Синхрон зеркала command
 
 ## Ключевые файлы
 
-- `platform-infra/tofu/` + `ci/includes/tofu.yml`
-- `вакансий/резюме-черновик.md`
-- `вакансий/программа-обучения-terraform-opentofu.md`
+- `platform-service/docs/sentry-baseline.md`, `helm/bugsink-local/`
+- `вакансий/карта-курса-лаборатории.md`
+- `вакансий/план-практики-инфраструктура-senior-devops.md` (фаза 6)
 
 ## Для planning в command
 
-- Цель: remote ~400k; TF gap закрыт на уровне MVP
+- Цель: remote ~400k; observability MVP + TF закрыты; следующий gap — DR
