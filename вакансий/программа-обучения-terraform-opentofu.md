@@ -6,7 +6,7 @@
 Связано: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md), [`резюме-черновик.md`](./резюме-черновик.md), сигнал рынка в command `career/data/market/`.
 
 **Обновлено:** 2026-08-13  
-**Статус:** 🔄 T0–T4 ✅ (CI добавлен) → следующий **T5** (резюме) · дождаться зелёного pipeline
+**Статус:** ✅ T0–T5 закрыты (фаза 5b MVP)
 
 ---
 
@@ -34,13 +34,19 @@
 
 Сделано: модуль `modules/data-platform-env`; `environments{}` в tfvars; outputs; `moved.tf` — refactor без recreate.  
 Артефакт: `platform-infra/tofu/modules/`, `moved.tf`, `outputs.tf`.  
-Критерий: закрыт (один apply для outputs + sync tag dev после CI).
+Критерий: закрыт.
 
-### Урок T4 (в работе, 2026-08-13)
+### Урок T4 (закрыт, 2026-08-13)
 
-Сделано: jobs `tofu_validate` + `tofu_plan` в `ci/includes/tofu.yml`; include в `.gitlab-ci.yml`; apply в CI нет.  
-Артефакт: CI YAML + README секция.  
-Критерий: зелёный pipeline в GitLab (после push).
+Сделано: jobs `tofu_validate` + `tofu_plan`; pipeline **зелёный**; apply в CI нет.  
+Артефакт: `ci/includes/tofu.yml`, артефакт `ci-plan.txt`.  
+Критерий: закрыт.
+
+### Урок T5 (закрыт, 2026-08-13)
+
+Сделано: буллет в `резюме-черновик.md`; дата в таблице компетенций; 5 вопросов ниже.  
+Артефакт: резюме + этот журнал.  
+Критерий: закрыт.
 ---
 
 ## Зачем (рынок)
@@ -82,15 +88,27 @@ Ansible у вас уже есть в проде — на интервью нуж
 - [x] **T1** — CLI установлен; провайдер выбран
 - [x] **T2** — apply создаёт ресурс в k3s
 - [x] **T3** — модуль + tfvars
-- [ ] **T4** — validate/plan в GitLab CI (YAML готов → нужен зелёный pipeline)
-- [ ] **T5** — буллет + дата в таблице компетенций
+- [x] **T4** — validate/plan в GitLab CI
+- [x] **T5** — буллет + дата в таблице компетенций
 
 ---
 
-## Артефакт для резюме (шаблон)
+## 5 вопросов на интервью (OpenTofu / Terraform)
 
-> Описал инфраструктуру lab data-platform как IaC (OpenTofu/Terraform): …; `plan`/`apply` идемпотентны; проверка `validate`/`plan` в GitLab CI.
+1. **Чем Terraform/OpenTofu отличается от Ansible?**  
+   TF — декларативный lifecycle инфры + state; Ansible — конфиг/CM на уже существующих узлах. Часто оба: TF создаёт, Ansible донастраивает.
 
+2. **Что такое state и зачем он нужен?**  
+   Память «что создано» и id реальных объектов; без state plan думает, что всё новое → риск duplicate/conflict.
+
+3. **Что делать, если объекты уже есть (созданы Helm/CI), а state пустой?**  
+   `import` (или import-блок) → выровнять drift (tags/labels) → идемпотентный plan; не слепой `apply` с `create`.
+
+4. **Как безопасно рефакторить в модули?**  
+   `moved` / `state mv` — смена адресов в state без destroy/recreate; проверить `plan: 0 add/0 destroy`.
+
+5. **Почему в CI часто только validate/plan, а не auto-apply?**  
+   Shared/remote state, review diff, ручной gate на prod; у нас local state + Helm уже из CI — apply из tofu-pipeline не делали намеренно.
 ---
 
 ## Когда стартовать
