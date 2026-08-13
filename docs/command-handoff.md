@@ -8,27 +8,27 @@
 
 ## Текущий фокус учёбы
 
-- **Фаза 6 DR D0–D3 ✅:** RTO/RPO, backup PG/MinIO, game day 23s
-- **Следующее:** фаза **7 security**; опц. H / фаза 8
+- **Фаза 7 security S0–S3 ✅:** threat model, NetworkPolicy+SA, Trivy CI, secrets policy
+- **Следующее:** фаза **8** упаковка (STAR/README); опц. H
 
 ## Готовность к интервью
 
-- Оценка: ~75–78% (data-path + Prom + Bugsink + TF + DR MVP)
-- Сильные: K8s/CI, data-path, observability, OpenTofu, DR game day
-- Пробелы: security (RBAC/NP/Trivy), STAR-упаковка, фаза 8
+- Оценка: ~80–82% (data-path + Prom + Bugsink + TF + DR + security MVP)
+- Сильные: K8s/CI, data-path, observability, OpenTofu, DR, NP/Trivy
+- Пробелы: STAR-упаковка, фаза 8, pitch под HH
 
 ## План на неделю
 
-1. Старт фазы 7 по плану
-2. Повторить 3 вопроса DR
+1. Старт фазы 8 (диаграмма + 3 STAR)
+2. Повторить вопросы DR + security
 3. Синхрон зеркала command
 
 ## Ключевые файлы
 
-- `platform-service/docs/dr-baseline.md`, `scripts/dr/`
+- `platform-service/docs/security-baseline.md`
+- `вакансий/программа-обучения-security.md`
 - `вакансий/резюме-черновик.md`
-- `вакансий/программа-обучения-dr.md`
 
 ## Для planning в command
 
-- Цель: remote ~400k; DR gap закрыт на уровне lab MVP
+- Цель: remote ~400k; security gap lab MVP закрыт

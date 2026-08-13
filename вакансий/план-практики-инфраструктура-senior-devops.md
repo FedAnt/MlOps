@@ -68,12 +68,12 @@
 
 Сводка: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md).
 
-- **Фаза 5** — observability: [`программа-обучения-sentry-prometheus-statsd.md`](./программа-обучения-sentry-prometheus-statsd.md), старт с §0; **минимум для рынка — трек F (Prometheus/Grafana)**.
-- **Фаза 5b** — Terraform/OpenTofu MVP: [`программа-обучения-terraform-opentofu.md`](./программа-обучения-terraform-opentofu.md) (после F; сигнал рынка remote ~400k).
+- **Фаза 7 security ✅** — [`программа-обучения-security.md`](./программа-обучения-security.md).
+- **Следующее:** фаза 8 упаковка; опц. трек H / StatsD.
 
 ### Предстоит (долгий хвост)
 
-- Observability (фаза 5), DR/надёжность, безопасность, упаковка под резюме/интервью (фазы 6–8).
+- S3 фазы 7 → фаза 8 упаковка под интервью; опц. трек H / StatsD.
 
 ---
 
@@ -397,7 +397,7 @@
 | 5 | В работе | недели 10-12 | 2026-08-12 | platform-service (Prometheus) | Трек F ✅; E/G опционально |
 | 5b | Завершено | после F | 2026-08-13 | platform-infra/tofu + ci/includes/tofu.yml | OpenTofu MVP: import, модуль, CI validate/plan |
 | 6 | Завершено | недели 12-14 | 2026-08-13 | platform-service/docs/dr-baseline.md + scripts/dr | RTO/RPO; backup PG/MinIO; game day 23s |
-| 7 | Не начато | недели 14-15 |  |  |  |
+| 7 | Завершено | недели 14-15 | 2026-08-13 | platform-service security-baseline + NP/SA + Trivy CI | S0–S3: NP+SA+Trivy+secrets policy+резюме |
 | 8 | Не начато | неделя 16+ |  |  |  |
 
 ---
