@@ -5,8 +5,8 @@
 
 Связано: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md), [`резюме-черновик.md`](./резюме-черновик.md), сигнал рынка в command `career/data/market/`.
 
-**Обновлено:** 2026-08-12  
-**Статус:** 🔄 T0–T2 ✅ → следующий **T3** (модуль + tfvars)
+**Обновлено:** 2026-08-13  
+**Статус:** 🔄 T0–T3 ✅ → следующий **T4** (CI validate/plan)
 
 ---
 
@@ -29,6 +29,12 @@
 Сделано: import ns+helm → drift → apply → **`No changes`**. Tags: dev `c0e05752`, staging `a3f12ccb`.  
 Артефакт: `tofu/terraform.tfstate`, `.gitignore`.  
 Критерий: закрыт.
+
+### Урок T3 (закрыт, 2026-08-13)
+
+Сделано: модуль `modules/data-platform-env`; `environments{}` в tfvars; outputs; `moved.tf` — refactor без recreate.  
+Артефакт: `platform-infra/tofu/modules/`, `moved.tf`, `outputs.tf`.  
+Критерий: закрыт (один apply для outputs + sync tag dev после CI).
 ---
 
 ## Зачем (рынок)
@@ -69,7 +75,7 @@ Ansible у вас уже есть в проде — на интервью нуж
 - [x] **T0** — различия TF / Ansible сформулированы
 - [x] **T1** — CLI установлен; провайдер выбран
 - [x] **T2** — apply создаёт ресурс в k3s
-- [ ] **T3** — модуль + tfvars
+- [x] **T3** — модуль + tfvars
 - [ ] **T4** — validate/plan в GitLab CI
 - [ ] **T5** — буллет + дата в таблице компетенций
 
