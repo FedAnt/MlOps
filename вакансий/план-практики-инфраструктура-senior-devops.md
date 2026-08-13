@@ -68,12 +68,12 @@
 
 Сводка: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md).
 
-- **Фаза 7 security ✅** — [`программа-обучения-security.md`](./программа-обучения-security.md).
-- **Следующее:** фаза 8 упаковка; опц. трек H / StatsD.
+- **Фаза 8 упаковка ✅** — [`программа-обучения-упаковка.md`](./программа-обучения-упаковка.md) (устно повторять STAR).
+- Опц. трек H / StatsD; мок-интервью.
 
 ### Предстоит (долгий хвост)
 
-- S3 фазы 7 → фаза 8 упаковка под интервью; опц. трек H / StatsD.
+- Устная практика STAR / мок; опц. трек H / StatsD.
 
 ---
 
@@ -398,7 +398,7 @@
 | 5b | Завершено | после F | 2026-08-13 | platform-infra/tofu + ci/includes/tofu.yml | OpenTofu MVP: import, модуль, CI validate/plan |
 | 6 | Завершено | недели 12-14 | 2026-08-13 | platform-service/docs/dr-baseline.md + scripts/dr | RTO/RPO; backup PG/MinIO; game day 23s |
 | 7 | Завершено | недели 14-15 | 2026-08-13 | platform-service security-baseline + NP/SA + Trivy CI | S0–S3: NP+SA+Trivy+secrets policy+резюме |
-| 8 | Не начато | неделя 16+ |  |  |  |
+| 8 | Завершено | неделя 16+ | 2026-08-13 | README + docs/interview-packaging.md | README/диаграмма; 4 STAR; 90д; pitch |
 
 ---
 
