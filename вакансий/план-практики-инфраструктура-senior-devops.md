@@ -396,7 +396,7 @@
 | 4 | Завершено | недели 8-10 | 2026-07-14 | platform-service | MinIO, AF 1–6, dbt A–D, Trino/CH, E2E DAG до `end` ✅; дальше — phase 5 observability |
 | 5 | В работе | недели 10-12 | 2026-08-12 | platform-service (Prometheus) | Трек F ✅; E/G опционально |
 | 5b | Завершено | после F | 2026-08-13 | platform-infra/tofu + ci/includes/tofu.yml | OpenTofu MVP: import, модуль, CI validate/plan |
-| 6 | В работе | недели 12-14 | 2026-08-13 | platform-service/docs/dr-baseline.md | Старт D0: RTO/RPO + SPOF |
+| 6 | Завершено | недели 12-14 | 2026-08-13 | platform-service/docs/dr-baseline.md + scripts/dr | RTO/RPO; backup PG/MinIO; game day 23s |
 | 7 | Не начато | недели 14-15 |  |  |  |
 | 8 | Не начато | неделя 16+ |  |  |  |
 

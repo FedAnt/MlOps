@@ -8,27 +8,27 @@
 
 ## Текущий фокус учёбы
 
-- **G Bugsink ✅** + **F Prometheus ✅** + **5b OpenTofu ✅**
-- **Следующее:** фаза **6 DR** (рекомендую) или короткий трек H; E StatsD — опц.
+- **Фаза 6 DR D0–D3 ✅:** RTO/RPO, backup PG/MinIO, game day 23s
+- **Следующее:** фаза **7 security**; опц. H / фаза 8
 
 ## Готовность к интервью
 
-- Оценка: ~72–75% (data-path + Prom + Bugsink + TF)
-- Сильные: K8s/GitLab CI, data-path, Prom, OpenTofu, error tracking SDK
-- Пробелы: DR, STAR, security (фаза 7); StatsD не блокер при ELK в проде
+- Оценка: ~75–78% (data-path + Prom + Bugsink + TF + DR MVP)
+- Сильные: K8s/CI, data-path, observability, OpenTofu, DR game day
+- Пробелы: security (RBAC/NP/Trivy), STAR-упаковка, фаза 8
 
 ## План на неделю
 
-1. Старт фазы 6 DR или H
-2. Не углублять AF/dbt
+1. Старт фазы 7 по плану
+2. Повторить 3 вопроса DR
 3. Синхрон зеркала command
 
 ## Ключевые файлы
 
-- `platform-service/docs/sentry-baseline.md`, `helm/bugsink-local/`
-- `вакансий/карта-курса-лаборатории.md`
-- `вакансий/план-практики-инфраструктура-senior-devops.md` (фаза 6)
+- `platform-service/docs/dr-baseline.md`, `scripts/dr/`
+- `вакансий/резюме-черновик.md`
+- `вакансий/программа-обучения-dr.md`
 
 ## Для planning в command
 
-- Цель: remote ~400k; observability MVP + TF закрыты; следующий gap — DR
+- Цель: remote ~400k; DR gap закрыт на уровне lab MVP
