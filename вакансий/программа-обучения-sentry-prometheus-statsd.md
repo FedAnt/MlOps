@@ -39,12 +39,12 @@
 Артефакт: ответы в сессии (уточнение: exporter — мост push→pull, не только «миграция»).  
 Критерий: закрыт.
 
-### Урок G.1–G.4 (в работе, 2026-08-13)
+### Урок G.1–G.4 (закрыт, 2026-08-13)
 
 Трек G.  
-Сделано: SDK + `/debug/sentry-test`; Helm `secretEnv`; **sentry.io 403** → **Bugsink** в `observability` (`helm/bugsink-local`, Ingress UP).  
-Артефакт: `docs/sentry-baseline.md`, chart Bugsink.  
-Критерий: G.3 — issue в UI Bugsink после DSN + deploy сервиса.
+Сделано: Bugsink в k3s; SDK; DSN ClusterDNS; `ALLOWED_HOSTS`; тестовый issue `RuntimeError: lab sentry test` в UI.  
+Артефакт: `helm/bugsink-local`, `docs/sentry-baseline.md`.  
+Критерий: закрыт.
 ---
 
 ### Урок F.1 (закрыт, 2026-08-12)
@@ -323,9 +323,9 @@ flowchart LR
 
 ### Трек G — Sentry
 
-- [ ] **G.1** — граница Sentry / логи / метрики (квиз в сессии).
+- [x] **G.1** — граница Sentry / логи / метрики.
 - [x] **G.4** — DSN через K8s Secret; SDK в сервисе; **Bugsink** (SaaS sentry.io недоступен).
-- [ ] **G.3** — тестовый issue в UI (после DSN + deploy).
+- [x] **G.3** — тестовый issue в UI (Bugsink): `RuntimeError: lab sentry test`.
 - [x] **G.3** — tags без секретов и PII (pipeline/bucket/prefix).
 - [x] **G.4** — черновик runbook `docs/sentry-baseline.md`.
 
