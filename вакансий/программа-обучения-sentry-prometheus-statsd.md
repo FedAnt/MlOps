@@ -39,6 +39,14 @@
 Артефакт: ответы в сессии (уточнение: exporter — мост push→pull, не только «миграция»).  
 Критерий: закрыт.
 
+### Урок G.1–G.4 (в работе, 2026-08-13)
+
+Трек G.  
+Сделано: SDK + `/debug/sentry-test`; Helm `secretEnv`; **sentry.io 403** → **Bugsink** в `observability` (`helm/bugsink-local`, Ingress UP).  
+Артефакт: `docs/sentry-baseline.md`, chart Bugsink.  
+Критерий: G.3 — issue в UI Bugsink после DSN + deploy сервиса.
+---
+
 ### Урок F.1 (закрыт, 2026-08-12)
 
 Трек F, § F1.  
@@ -315,11 +323,11 @@ flowchart LR
 
 ### Трек G — Sentry
 
-- [ ] **G.1** — граница Sentry / логи / метрики.
-- [ ] **G.4** — DSN в CI Variables; SDK в сервисе.
-- [ ] **G.3** — тестовый issue в UI.
-- [ ] **G.3** — tags без секретов и PII.
-- [ ] **G.4** — черновик runbook для Sentry.
+- [ ] **G.1** — граница Sentry / логи / метрики (квиз в сессии).
+- [x] **G.4** — DSN через K8s Secret; SDK в сервисе; **Bugsink** (SaaS sentry.io недоступен).
+- [ ] **G.3** — тестовый issue в UI (после DSN + deploy).
+- [x] **G.3** — tags без секретов и PII (pipeline/bucket/prefix).
+- [x] **G.4** — черновик runbook `docs/sentry-baseline.md`.
 
 ### Трек H — сквозной
 
