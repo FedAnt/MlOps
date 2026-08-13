@@ -6,7 +6,7 @@
 Связано: [`карта-курса-лаборатории.md`](./карта-курса-лаборатории.md), [`резюме-черновик.md`](./резюме-черновик.md), сигнал рынка в command `career/data/market/`.
 
 **Обновлено:** 2026-08-13  
-**Статус:** 🔄 T0–T3 ✅ → следующий **T4** (CI validate/plan)
+**Статус:** 🔄 T0–T4 ✅ (CI добавлен) → следующий **T5** (резюме) · дождаться зелёного pipeline
 
 ---
 
@@ -35,6 +35,12 @@
 Сделано: модуль `modules/data-platform-env`; `environments{}` в tfvars; outputs; `moved.tf` — refactor без recreate.  
 Артефакт: `platform-infra/tofu/modules/`, `moved.tf`, `outputs.tf`.  
 Критерий: закрыт (один apply для outputs + sync tag dev после CI).
+
+### Урок T4 (в работе, 2026-08-13)
+
+Сделано: jobs `tofu_validate` + `tofu_plan` в `ci/includes/tofu.yml`; include в `.gitlab-ci.yml`; apply в CI нет.  
+Артефакт: CI YAML + README секция.  
+Критерий: зелёный pipeline в GitLab (после push).
 ---
 
 ## Зачем (рынок)
@@ -76,7 +82,7 @@ Ansible у вас уже есть в проде — на интервью нуж
 - [x] **T1** — CLI установлен; провайдер выбран
 - [x] **T2** — apply создаёт ресурс в k3s
 - [x] **T3** — модуль + tfvars
-- [ ] **T4** — validate/plan в GitLab CI
+- [ ] **T4** — validate/plan в GitLab CI (YAML готов → нужен зелёный pipeline)
 - [ ] **T5** — буллет + дата в таблице компетенций
 
 ---
